@@ -181,3 +181,4 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\n
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.pdb
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.genruntimeconfig.cache
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\ref\TaskManagement.API.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\AutoMapper.dll

@@ -1,5 +1,5 @@
-﻿using Mapster;
-using MapsterMapper;
+﻿using AutoMapper;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,11 +11,11 @@ using TaskManagement.Core.ViewModels.UserManagement;
 using TaskManagement.Data.Entities;
 namespace TaskManagement.Bussiness.MapperProfile
 {
-    public class LoginMappingProfile : IMapperProfile
+    public class LoginMappingProfile : Profile
     {
-        public void MapProfile()
+        public LoginMappingProfile()
         {
-            TypeAdapterConfig<RefreshToken,RefreshTokenModel>.NewConfig().TwoWays();
+            CreateMap<RefreshToken, RefreshTokenModel>().ReverseMap();
         }
     }
 }

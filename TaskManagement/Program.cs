@@ -27,11 +27,13 @@ namespace TaskManagement.API
 
             builder.Services.AddSingleton<ITypeFinder>(typeFinder);
 
-            // Register Mapster mapping profiles
-            builder.Services.RegisterMappings(typeFinder);
 
             // Register other services from all layers
             builder.Services.RegisterDependencies(typeFinder, builder.Configuration);
+
+            // Register Mapster mapping profiles
+            builder.Services.RegisterMappings();
+
 
             builder.Services.AddSingleton<JWTGenerator>();
             builder.Services.AddSingleton<Hashing>();

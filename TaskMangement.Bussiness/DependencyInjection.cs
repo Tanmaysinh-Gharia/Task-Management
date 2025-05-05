@@ -35,7 +35,6 @@ namespace TaskManagement.Bussiness
         public int Order => 1;
         #endregion
 
-
         #region Private Methods
 
         private static void AddAuthentication(IServiceCollection services)

@@ -1,5 +1,4 @@
-﻿using Mapster;
-using MapsterMapper;
+﻿using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -9,8 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.Core.InjectionInterfaces;
 using TaskManagement.Core.TypeFinder;
-using Mapster;
-using MapsterMapper;
+
 namespace TaskManagement.Core
 {
     public static class DependencyRegistrar
@@ -35,32 +33,38 @@ namespace TaskManagement.Core
             }
         }
 
-        public static void RegisterMappings(this IServiceCollection services, ITypeFinder typeFinder)
+        //public static void RegisterMappings(this IServiceCollection services, ITypeFinder typeFinder)
+        //{
+        //    //to map nested objects
+        //    TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
+
+        //    //to ignore null values while mapping
+        //    TypeAdapterConfig.GlobalSettings.Default.IgnoreNullValues(true);
+
+        //    //configure mapster
+        //    services.AddSingleton(TypeAdapterConfig.GlobalSettings);
+
+        //    //add mapper to map object using IMapper
+        //    services.AddScoped<IMapper, Mapper>();
+
+        //    //find mapper profile types configurations provided by other assemblies
+        //    IEnumerable<Type> mapperProfileTypes = typeFinder.FindClassesOfType<IMapperProfile>();
+
+        //    //create instances of mapper profiles
+        //    IEnumerable<IMapperProfile> mapperProfiles = mapperProfileTypes
+        //        .Select(m => (IMapperProfile)Activator.CreateInstance(m));
+
+        //    //add profiles
+        //    foreach (IMapperProfile profile in mapperProfiles)
+        //    {
+        //        profile?.MapProfile();
+        //    }
+        //}
+
+
+        public static void RegisterMappings(this IServiceCollection services)
         {
-            //to map nested objects
-            TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
-
-            //to ignore null values while mapping
-            TypeAdapterConfig.GlobalSettings.Default.IgnoreNullValues(true);
-
-            //configure mapster
-            services.AddSingleton(TypeAdapterConfig.GlobalSettings);
-
-            //add mapper to map object using IMapper
-            services.AddScoped<IMapper, Mapper>();
-
-            //find mapper profile types configurations provided by other assemblies
-            IEnumerable<Type> mapperProfileTypes = typeFinder.FindClassesOfType<IMapperProfile>();
-
-            //create instances of mapper profiles
-            IEnumerable<IMapperProfile> mapperProfiles = mapperProfileTypes
-                .Select(m => (IMapperProfile)Activator.CreateInstance(m));
-
-            //add profiles
-            foreach (IMapperProfile profile in mapperProfiles)
-            {
-                profile?.MapProfile();
-            }
+            services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
         }
 
     }

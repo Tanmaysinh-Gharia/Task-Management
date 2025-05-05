@@ -1,5 +1,4 @@
-﻿using Mapster;
-using MapsterMapper;
+﻿using AutoMapper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,29 +9,26 @@ using TaskManagement.Core.ViewModels.UserManagement;
 using TaskManagement.Data.Entities;
 namespace TaskManagement.Bussiness.MapperProfile
 {
-    public class UserManagementMappingProfile : IMapperProfile
+    public class UserManagementMappingProfile : Profile
     {
-        public void MapProfile()
+        public UserManagementMappingProfile()
         {
-            TypeAdapterConfig<User, UserModel>.NewConfig().TwoWays();
+            CreateMap<User, UserModel>().ReverseMap();
 
+            CreateMap<User, UserViewModel>();
+                
+            CreateMap<UserViewModel, User>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.Email, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore());
 
-            // Forward: Entity to ViewModel (Id & Email included)
-            TypeAdapterConfig<User, UserViewModel>.NewConfig();
-
-            // Reverse: ViewModel to Entity (Id & Email ignored)
-            TypeAdapterConfig<UserViewModel, User>.NewConfig()
-                .Ignore(dest => dest.Id)
-                .Ignore(dest => dest.Email)
-                .Ignore(dest => dest.PasswordHash)
-                .Ignore(dest => dest.CreatedAt)
-                .Ignore(dest => dest.Role);
-
-            TypeAdapterConfig<CreateUserModel, User>.NewConfig()
-                .Ignore(dest => dest.Id)
-                .Ignore(dest => dest.CreatedAt)
-                .Ignore(dest => dest.PasswordHash)
-                .Ignore(dest => dest.Role);
+            CreateMap<CreateUserModel, User>()
+                .ForMember(dest => dest.Id, opt => opt.Ignore())
+                .ForMember(dest => dest.PasswordHash, opt => opt.Ignore())
+                .ForMember(dest => dest.Role, opt => opt.Ignore())
+                .ForMember(dest => dest.CreatedAt, opt => opt.Ignore());
         }
     }
 }
