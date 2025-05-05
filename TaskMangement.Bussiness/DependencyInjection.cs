@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.Bussiness.Authentication;
+using TaskManagement.Bussiness.TaskManage;
 using TaskManagement.Bussiness.UserManage;
 using TaskManagement.Core.Common.Authentication.Background;
 using TaskManagement.Core.InjectionInterfaces;
@@ -22,6 +23,7 @@ namespace TaskManagement.Bussiness
             #region OnRequestJobs
             AddAuthentication(serviceCollection);
             AddUserManager(serviceCollection);
+            AddTaskManager(serviceCollection);
             #endregion
 
             #region Background Jobs
@@ -52,6 +54,11 @@ namespace TaskManagement.Bussiness
         private static void AddUserManager(IServiceCollection services)
         {
             services.AddScoped<IUserManager, UserManager>();
+        }
+
+        private static void AddTaskManager(IServiceCollection services)
+        {
+            services.AddScoped<ITaskManager, TaskManager>();
         }
         #endregion
     }

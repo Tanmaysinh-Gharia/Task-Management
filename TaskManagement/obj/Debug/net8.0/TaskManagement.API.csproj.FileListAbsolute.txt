@@ -10,8 +10,6 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\n
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Azure.Identity.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\BCrypt.Net-Next.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Humanizer.dll
-C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Mapster.dll
-C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Mapster.Core.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Microsoft.Bcl.Memory.dll
@@ -182,3 +180,4 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\n
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.genruntimeconfig.cache
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\ref\TaskManagement.API.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\AutoMapper.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\bin\Debug\net8.0\Migrations\Scripts\StoredProcedures\sp_GetFilteredTasks.sql

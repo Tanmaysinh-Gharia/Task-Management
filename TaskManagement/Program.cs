@@ -8,6 +8,7 @@ using TaskManagement.Core.Common.Authentication;
 using TaskManagement.Core.Helpers;
 using TaskManagement.Core.TypeFinder;
 using TaskManagement.API.Middlewares.Authentication;
+using TaskManagement.Core.Common.Configuration;
 namespace TaskManagement.API
 {
     public class Program
@@ -34,6 +35,7 @@ namespace TaskManagement.API
             // Register Mapster mapping profiles
             builder.Services.RegisterMappings();
 
+            builder.Services.Configure<PaginationSettings>(builder.Configuration.GetSection("Pagination"));
 
             builder.Services.AddSingleton<JWTGenerator>();
             builder.Services.AddSingleton<Hashing>();

@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using TaskManagement.Core.InjectionInterfaces;
 using TaskManagement.Data.Context;
 using TaskManagement.Data.Repositories.RefreshTokenRepo;
+using TaskManagement.Data.Repositories.TaskRepo;
 using TaskManagement.Data.Repositories.UserRepo;
 
 namespace TaskManagement.Data
@@ -29,7 +30,9 @@ namespace TaskManagement.Data
 
             AddRefreshTokenRepository(serviceCollection);
 
+            AddTaskRepository(serviceCollection);
 
+            AddTransaction(serviceCollection);
             #endregion
         }
 
@@ -45,6 +48,14 @@ namespace TaskManagement.Data
         private static void AddRefreshTokenRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
+        }
+        private static void AddTaskRepository(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<ITaskRepository, TaskRepository>();
+        }
+        private static void AddTransaction(IServiceCollection serviceCollection)
+        {
+            serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();
         }
         #endregion
     }

@@ -30,7 +30,7 @@ namespace TaskManagement.Data.Entities
 
         public string? NewValue { get; set; }
 
-        public DateTime ChangeTime { get; set; }
+        public DateTime ChangeTime { get; set; } = DateTime.Now;
     }
 
 }

@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using TaskManagement.Core.Helpers;
+using TaskManagement.Core.ViewModels.TaskManagement;
 using TaskManagement.Data.Configurations;
 using TaskManagement.Data.Entities;
 using TaskManagement.Data.Seed;
@@ -23,6 +24,9 @@ namespace TaskManagement.Data.Context
         public DbSet<TaskEntity> Tasks { get; set; }
         public DbSet<TaskDetail> TaskDetails { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
+
+        // Creating Store Procedure (SP)
+        public DbSet<TaskListItemViewModel> TaskListItemViewModel { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -43,6 +47,12 @@ namespace TaskManagement.Data.Context
             modelBuilder.ApplyConfiguration(new TaskSeed());
             modelBuilder.ApplyConfiguration(new TaskDetailSeed());
             modelBuilder.ApplyConfiguration(new RefreshTokenSeed());
+
+            #endregion
+
+            #region Stored Procedures
+
+            modelBuilder.Entity<TaskListItemViewModel>().HasNoKey().ToView(null);
             
             #endregion
         }

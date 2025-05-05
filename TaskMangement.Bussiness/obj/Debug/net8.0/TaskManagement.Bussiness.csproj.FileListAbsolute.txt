@@ -15,3 +15,4 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Bussiness\ob
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Bussiness\obj\Debug\net8.0\refint\TaskManagement.Bussiness.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Bussiness\obj\Debug\net8.0\TaskManagement.Bussiness.pdb
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Bussiness\obj\Debug\net8.0\ref\TaskManagement.Bussiness.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Bussiness\bin\Debug\net8.0\Migrations\Scripts\StoredProcedures\sp_GetFilteredTasks.sql

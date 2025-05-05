@@ -31,6 +31,7 @@ namespace TaskManagement.Core
                 // Register the dependencies using the current instance
                 dependencyInjection.Register(services, configuration);
             }
+
         }
 
         //public static void RegisterMappings(this IServiceCollection services, ITypeFinder typeFinder)

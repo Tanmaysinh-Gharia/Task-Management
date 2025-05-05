@@ -8,6 +8,10 @@
 
   <ItemGroup>
     <ProjectReference Include="..\TaskMangement.Core\TaskManagement.Core.csproj" />
+
+	  <Content Include="Migrations\Scripts\StoredProcedures\*.sql">
+		  <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+	  </Content>
   </ItemGroup>
 
 </Project>
