@@ -1,0 +1,14 @@
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\bin\Debug\net8.0\TaskManagement.Core.deps.json
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\bin\Debug\net8.0\TaskManagement.Core.runtimeconfig.json
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\bin\Debug\net8.0\TaskManagement.Core.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\bin\Debug\net8.0\TaskManagement.Core.pdb
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.csproj.AssemblyReference.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.AssemblyInfoInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.AssemblyInfo.cs
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.csproj.CoreCompileInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\refint\TaskManagement.Core.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.pdb
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.genruntimeconfig.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\ref\TaskManagement.Core.dll
