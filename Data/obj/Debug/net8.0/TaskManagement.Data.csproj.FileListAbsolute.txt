@@ -1,3 +1,4 @@
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\bin\Debug\net8.0\Migrations\Scripts\StoredProcedures\sp_GetFilteredTasks.sql
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\bin\Debug\net8.0\TaskManagement.Data.deps.json
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\bin\Debug\net8.0\TaskManagement.Data.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\bin\Debug\net8.0\TaskManagement.Data.pdb
@@ -13,4 +14,3 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\Task
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\refint\TaskManagement.Data.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.pdb
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\ref\TaskManagement.Data.dll
-C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\bin\Debug\net8.0\Migrations\Scripts\StoredProcedures\sp_GetFilteredTasks.sql

@@ -10,10 +10,10 @@ namespace TaskManagement.Bussiness.TaskManage
     public interface ITaskManager
     {
         Task AddTaskAsync(CreateTaskModel model, int creatorId);
-        Task UpdateTaskAsync(TaskModel model);
-        Task DeleteTaskAsync(int taskId, int deletedByUserId);
-        Task ChangeTaskStatusAsync(int id, TaskStatus status);
-        Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model);
+        Task UpdateTaskAsync(TaskModel model, int userId, bool isAdmin);
+        Task DeleteTaskAsync(int taskId, int deletedByUserId, bool isAdmin);
+        Task ChangeTaskStatusAsync(int id, TaskStatus status, int userId, bool isAdmin);
+        Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model, int userId, bool isAdmin);
 
     }
 

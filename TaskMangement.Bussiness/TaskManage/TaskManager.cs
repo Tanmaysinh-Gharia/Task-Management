@@ -32,7 +32,7 @@ namespace TaskManagement.Bussiness.TaskManage
         }
 
 
-        public async Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model)
+        public async Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model, int userId, bool isAdmin)
         {
             // Fallback to config values if not provided
             var pageNumber = model.PageNumber > 0 ? model.PageNumber : _paginationSettings.DefaultPageNumber;
@@ -45,7 +45,9 @@ namespace TaskManagement.Bussiness.TaskManage
                 model.SortColumn ?? "CreatedAt",
                 model.SortOrder ?? "ASC",
                 pageNumber,
-                pageSize
+                pageSize,
+                userId,
+                isAdmin
             );
         }
 
@@ -59,7 +61,7 @@ namespace TaskManagement.Bussiness.TaskManage
             await _taskRepo.AddAsync(entity);
         }
 
-        public async Task UpdateTaskAsync(TaskModel model)
+        public async Task UpdateTaskAsync(TaskModel model, int userId, bool isAdmin)
         {
             await _unitOfWork.BeginTransactionAsync();
 
@@ -68,6 +70,13 @@ namespace TaskManagement.Bussiness.TaskManage
                 var task = await _taskRepo.GetByIdAsync(model.Id);
                 if (task == null)
                     throw new Exception("Task not found");
+
+                if (isAdmin && task.CreatorId == task.AssigneeId)
+                    throw new UnauthorizedAccessException("Admins cannot update personal tasks.");
+
+                if (isAdmin && task.CreatorId == task.AssigneeId)
+                    throw new UnauthorizedAccessException("Admins cannot update personal tasks.");
+
 
                 var now = DateTime.Now;
                 var changes = new List<TaskDetail>();
@@ -123,15 +132,23 @@ namespace TaskManagement.Bussiness.TaskManage
             }
         }
 
-        public async Task DeleteTaskAsync(int taskId, int deletedByUserId)
+        public async Task DeleteTaskAsync(int taskId, int deletedByUserId, bool isAdmin)
         {
             await _unitOfWork.BeginTransactionAsync();
 
             try
             {
+                int userId = deletedByUserId;
                 var task = await _taskRepo.GetByIdAsync(taskId);
                 if (task == null || task.IsDeleted)
                     throw new Exception("Task not found or already deleted");
+
+
+                if (isAdmin && task.CreatorId == task.AssigneeId)
+                    throw new UnauthorizedAccessException("Admins cannot delete personal tasks.");
+
+                if (!isAdmin && (task.CreatorId != userId || task.AssigneeId != userId))
+                    throw new UnauthorizedAccessException("Users can only delete their own personal tasks.");
 
                 task.IsDeleted = true;
                 task.UpdatedAt = DateTime.Now;
@@ -160,16 +177,19 @@ namespace TaskManagement.Bussiness.TaskManage
         }
 
 
-        public async Task ChangeTaskStatusAsync(int id, TaskStatus status)
+        public async Task ChangeTaskStatusAsync(int id, TaskStatus status, int userId, bool isAdmin)
         {
             var task = await _taskRepo.GetByIdAsync(id);
             if (task == null || task.IsDeleted) throw new Exception("Task not found");
+
+
+            if (!isAdmin && task.AssigneeId != userId)
+                throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
 
             task.Status = status;
             task.UpdatedAt = DateTime.Now;
             await _taskRepo.UpdateAsync(task);
         }
-
 
 
         #region Private Methods

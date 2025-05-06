@@ -5,7 +5,9 @@
     @SortColumn NVARCHAR(50) = 'CreatedAt',
     @SortOrder NVARCHAR(4) = 'ASC',
     @PageNumber INT = 1,
-    @PageSize INT = 10
+    @PageSize INT = 10,
+    @UserId INT = NULL,
+    @IsAdmin BIT = 0
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -45,10 +47,14 @@ BEGIN
     IF @Priority IS NOT NULL
         SET @Sql += ' AND t.Priority = ' + CAST(@Priority AS NVARCHAR);
 
-    -- ✅ Safe & Valid ORDER BY
+    IF @IsAdmin = 0
+        SET @Sql += ' AND ((t.CreatorId = @UserId AND t.AssigneeId = @UserId) OR t.AssigneeId = @UserId)';
+    ELSE
+        SET @Sql += ' AND NOT (t.CreatorId = t.AssigneeId AND t.AssigneeId != @UserId)';
+
+
     SET @Sql += ' ORDER BY [' + @SortColumn + '] ' + @SortOrder;
     SET @Sql += ' OFFSET ' + CAST(@Offset AS NVARCHAR) + ' ROWS FETCH NEXT ' + CAST(@PageSize AS NVARCHAR) + ' ROWS ONLY;';
 
-    -- PRINT @Sql; -- (for debug)
     EXEC sp_executesql @Sql;
 END;

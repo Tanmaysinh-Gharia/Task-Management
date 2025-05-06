@@ -12,26 +12,32 @@ namespace TaskManagement.API.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public class TaskController : ControllerBase
     {
         private readonly ITaskManager _taskManager;
         private readonly ILogger<TaskController> _logger;
+        private int GetUserId() => int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("User ID claim not found."));
+        private bool IsAdmin() => User.IsInRole("Admin");
 
         public TaskController(ITaskManager taskManager, ILogger<TaskController> logger)
         {
             _taskManager = taskManager;
             _logger = logger;
         }
-        [Authorize]
+
+
+
         [HttpPost(TaskManagementRoutes.Create)]
         public async Task<IActionResult> Create([FromBody] CreateTaskModel model)
         {
             try
             {
-                var creatorId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("User ID claim not found."));
+                var userId = GetUserId();
+                var creatorId = userId;
+
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
-                if ( role == Role.User.ToString() && model.AssigneeId != creatorId)
+                if ( !IsAdmin() && model.AssigneeId != creatorId)
                 {
                     return BadRequest(ResponseBuilder.Error("You can only assign tasks to yourself."));
                 }
@@ -46,20 +52,22 @@ namespace TaskManagement.API.Controllers
         }
 
 
+
         [HttpPut(TaskManagementRoutes.Update)]
-        public async Task<IActionResult> Update(
-            int id, 
-            [FromBody] TaskModel model)
+        public async Task<IActionResult> Update(int id, [FromBody] TaskModel model)
         {
             try
             {
                 model.Id = id;
-                model.UpdatedById = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ??
-                                       throw new InvalidOperationException("User identity not found."));
+                model.UpdatedById = GetUserId();
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                await _taskManager.UpdateTaskAsync(model);
+                await _taskManager.UpdateTaskAsync(model,model.UpdatedById,IsAdmin());
                 return Ok(ResponseBuilder.Success("Task updated successfully."));
+            }
+            catch (UnauthorizedAccessException uex)
+            {
+                return Forbid(uex.Message);
             }
             catch (Exception ex)
             {
@@ -68,14 +76,21 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+
+
         [HttpDelete(TaskManagementRoutes.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var userId = int.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value ?? throw new InvalidOperationException("User ID claim not found."));
-                await _taskManager.DeleteTaskAsync(id,userId);
+                var userId = GetUserId();
+
+                await _taskManager.DeleteTaskAsync(id,userId,IsAdmin());
                 return Ok(ResponseBuilder.Success("Task deleted successfully."));
+            }
+            catch (UnauthorizedAccessException uex)
+            {
+                return Forbid(uex.Message);
             }
             catch (Exception ex)
             {
@@ -89,8 +104,12 @@ namespace TaskManagement.API.Controllers
         {
             try
             {
-                await _taskManager.ChangeTaskStatusAsync(id, status);
+                await _taskManager.ChangeTaskStatusAsync(id, status, GetUserId(), IsAdmin());
                 return Ok(ResponseBuilder.Success("Task status updated."));
+            }
+            catch (UnauthorizedAccessException uex)
+            {
+                return Forbid(uex.Message);
             }
             catch (Exception ex)
             {
@@ -104,7 +123,9 @@ namespace TaskManagement.API.Controllers
         {
             try
             {
-                var result = await _taskManager.GetFilteredTasksAsync(model);
+
+                var userId = GetUserId();
+                var result = await _taskManager.GetFilteredTasksAsync(model,userId,IsAdmin());
                 return Ok(ResponseBuilder.Success(result));
             }
             catch (Exception ex)

@@ -25,6 +25,8 @@ namespace TaskManagement.Data.Repositories.TaskRepo
             string? sortColumn,
             string? sortOrder,
             int pageNumber,
-            int pageSize);
+            int pageSize,
+            int userId,
+            bool isAdmin);
     }
 }
