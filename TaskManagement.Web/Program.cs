@@ -18,7 +18,6 @@ namespace TaskManagement.Web
             Settings.LoadFromConfiguration(builder.Configuration);
 
 
-
             // Register Dependency Injection
             ITypeFinder typeFinder = new TypeFinder();
 
@@ -31,11 +30,12 @@ namespace TaskManagement.Web
 
 
             var app = builder.Build();
+            app.UseMiddleware<GlobalExceptionMiddleware>();
 
             // Configure the HTTP request pipeline.
             if (!app.Environment.IsDevelopment())
             {
-                app.UseExceptionHandler("/Home/Error");
+                app.UseExceptionHandler("/Authentication/Error");
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
@@ -44,14 +44,7 @@ namespace TaskManagement.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-            //app.UseWhen(context => !context.Request.Path.StartsWithSegments("/lib") &&
-            //          !context.Request.Path.StartsWithSegments("/css") &&
-            //          !context.Request.Path.StartsWithSegments("/js") &&
-            //          !context.Request.Path.StartsWithSegments("/images"),
-            //            appBuilder =>
-            //            {
-            //                appBuilder.UseMiddleware<AutoRefreshTokenMiddleware>();
-            //            });
+
             app.UseAuthorization();
 
             app.MapControllerRoute(

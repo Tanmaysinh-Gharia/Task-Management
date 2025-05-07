@@ -1,6 +1,9 @@
-﻿<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+﻿@{
+    var role = TempData["UserRole"]?.ToString()?.ToLower();
+    string filename = role + ".js";
+}
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 <script src="~/js/url.js"></script>
 <script src="~/js/common.js"></script>
 <script src="~/js/admin.js"></script>
 <script src="~/js/user.js"></script>
-

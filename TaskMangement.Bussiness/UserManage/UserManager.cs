@@ -1,10 +1,5 @@
 ﻿
 using AutoMapper;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.Enums;
 using TaskManagement.Core.Helpers;
 using TaskManagement.Core.ViewModels.UserManagement;
@@ -26,32 +21,40 @@ namespace TaskManagement.Bussiness.UserManage
             _hashing = hashing;
         }
 
+        /// <summary>
+        /// Retrieves all users and maps them to view models.
+        /// </summary>
         public async Task<IEnumerable<UserViewModel>> GetAllUsersAsync()
         {
             return _mapper.Map<IEnumerable<UserViewModel>>( await _userRepository.GetAllUsersAsync() );
         }
 
+        /// <summary>
+        /// Gets a user by their ID and maps to UserModel. Returns null if not found.
+        /// </summary>
         public async Task<UserModel?> GetUserByIdAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            User? user = await _userRepository.GetUserByIdAsync(id);
             return user == null ? null : _mapper.Map<UserModel>(user);
         }
 
+        /// <summary>
+        /// Gets a user by their email and maps to UserModel. Returns null if not found.
+        /// </summary>
         public async Task<UserModel?> GetUserByEmailAsync(string email)
         {
-            var user = await _userRepository.GetUserByEmailAsync(email);
+            User? user = await _userRepository.GetUserByEmailAsync(email);
             return user == null ? null : _mapper.Map<UserModel>(user);
         }
 
-        public async Task AddUserAsync(UserModel userModel)
-        {
-            var user = _mapper.Map<User>(userModel);
-            await _userRepository.AddAsync(user);
-        }
 
+        /// <summary>
+        /// Adds a new user by mapping from CreateUserModel and hashing the password. 
+        /// Sets default role and creation time.
+        /// </summary>
         public async Task AddUserAsync(CreateUserModel model)
         {
-            var entity = _mapper.Map<User>(model);
+            User entity = _mapper.Map<User>(model);
             entity.PasswordHash = _hashing.HashPassword(model.Password);
             entity.CreatedAt = DateTime.Now;
             entity.Role = Role.User; // default role if needed
@@ -59,23 +62,23 @@ namespace TaskManagement.Bussiness.UserManage
             await _userRepository.AddAsync(entity);
         }
 
-
-        public async Task UpdateUserAsync(UserModel userModel)
-        {
-            var user = _mapper.Map<User>(userModel);
-            await _userRepository.UpdateAsync(user);
-        }
-
+        
+        /// <summary>
+        /// Returns user details as a UserViewModel for display purposes. Throws if not found.
+        /// </summary>
         public async Task<UserViewModel> ShowUserByIdAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            User? user = await _userRepository.GetUserByIdAsync(id);
             if (user == null) throw new Exception("User not found");
             return _mapper.Map<UserViewModel>(user);
         }
-
+        
+        /// <summary>
+        /// Updates user data using UserViewModel. Only non-sensitive fields are updated.
+        /// </summary>
         public async Task UpdateUserAsync(UserViewModel userModel)
         {
-            var user = await _userRepository.GetUserByIdAsync(userModel.Id);
+            User? user = await _userRepository.GetUserByIdAsync(userModel.Id);
             if (user == null) throw new Exception("User not found");
 
             // Only update allowed fields
@@ -88,15 +91,22 @@ namespace TaskManagement.Bussiness.UserManage
             await _userRepository.UpdateAsync(user);
         }
 
+
+        /// <summary>
+        /// Deletes a user by ID if the user exists in the database.
+        /// </summary>
         public async Task DeleteUserAsync(int id)
         {
-            var user = await _userRepository.GetUserByIdAsync(id);
+            User? user = await _userRepository.GetUserByIdAsync(id);
             if (user != null)
             {
                 await _userRepository.DeleteAsync(user);
             }
         }
 
+        /// <summary>
+        /// Checks if a user exists by ID.
+        /// </summary>
         public async Task<bool> UserExistsAsync(int id)
         {
             return await _userRepository.ExistsAsync(id);

@@ -5,6 +5,13 @@ using TaskManagement.Core.ViewModels.Login;
 
 namespace TaskManagement.API.Middlewares.Authentication
 {
+    /// <summary>
+    // This middleware handles automatic JWT access token renewal on expiration.
+    // If an expired token is detected in the "Authorization" header, it checks for a valid
+    // "X-Refresh-Token" header. If present, it sends a request to the refresh endpoint,
+    // retrieves new access and refresh tokens, and updates the request headers so downstream
+    // middlewares/controllers receive valid credentials for continued processing.
+    /// <summary>
     public class AutoRefreshTokenMiddleware
     {
         private readonly RequestDelegate _next;
@@ -43,7 +50,7 @@ namespace TaskManagement.API.Middlewares.Authentication
                 }
                 catch (SecurityTokenExpiredException)
                 {
-                    var refreshToken = context.Request.Headers["X-Refresh-Token"].FirstOrDefault();
+                    string refreshToken = context.Request.Headers["X-Refresh-Token"].FirstOrDefault();
                     if (string.IsNullOrEmpty(refreshToken))
                     {
                         context.Response.StatusCode = 401;

@@ -1,16 +1,6 @@
 [
   {
     "ContainingType": "TaskManagement.API.Controllers.AuthenticationController",
-    "Method": "GetData",
-    "RelativePath": "api/Authentication/getdata",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": []
-  },
-  {
-    "ContainingType": "TaskManagement.API.Controllers.AuthenticationController",
     "Method": "Login",
     "RelativePath": "api/Authentication/login",
     "HttpMethod": "POST",

@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity.Data;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Bussiness.Authentication;
 using TaskManagement.Core.ApiRoutes;
 using TaskManagement.Core.Common.ResponseHandler;
@@ -18,13 +16,20 @@ namespace TaskManagement.API.Controllers
         {
             _authManager = authManager;
         }
-        
+
+        /// <summary>
+        /// Authenticates the user using provided email and password,
+        /// and returns a JWT access and refresh token if valid.
+        /// </summary>
+        /// <param name="request">LoginRequest containing Email and Password</param>
+        /// <returns>200 OK with tokens if successful; 401 Unauthorized if invalid credentials</returns>
+
         [HttpPost(AuthenticationManagementRoutes.Login)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
             {
-                var response = await _authManager.LoginAsync(request.Email, request.Password);
+                AuthenticationResponse? response = await _authManager.LoginAsync(request.Email, request.Password);
                 return Ok(ResponseBuilder.Success(response));
             }
             catch (UnauthorizedAccessException)
@@ -32,13 +37,20 @@ namespace TaskManagement.API.Controllers
                 return Unauthorized();
             }
         }
-        
+
+
+        /// <summary>
+        /// Refreshes the expired access token using a valid refresh token.
+        /// </summary>
+        /// <param name="token">Refresh token string</param>
+        /// <returns>200 OK with new access and refresh tokens; 401 Unauthorized if refresh token is invalid</returns>
+
         [HttpPost(AuthenticationManagementRoutes.Refresh)]
         public async Task<IActionResult> RefreshToken([FromBody] string token)
         {
             try
             {
-                var response = await _authManager.RefreshTokenAsync(token);
+                AuthenticationResponse? response = await _authManager.RefreshTokenAsync(token);
                 return Ok(response);
             }
             catch (UnauthorizedAccessException)
@@ -47,20 +59,5 @@ namespace TaskManagement.API.Controllers
             }
         }
 
-        [Authorize]
-        [HttpGet("getdata")]
-        public async Task<IActionResult> GetData()
-        {
-            try
-            {
-                Dictionary<String, String> data = new Dictionary<string, string>();
-                data["Users"] = "Log";
-                return Ok(data);
-            }
-            catch
-            {
-                return Unauthorized();
-            }
-        }
     }
 }

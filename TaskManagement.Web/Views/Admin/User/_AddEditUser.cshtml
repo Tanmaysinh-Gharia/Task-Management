@@ -10,56 +10,58 @@
             <h1>Add User</h1>
         </div>
 
-        <form class="drawer-form" id="frmUser">
+        <form class="drawer-form" id="formAddEditUser">
+            @Html.Hidden("userId", "0", new { id = "userId" })  <!-- ✅ Hidden field for update -->
+
             <div class="row">
                 <div class="form-title">
                     Please provide the following information about the user.
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="UserName" class="form-control" placeholder required />
+                    <input id="txtUserName" asp-for="UserName" class="form-control" placeholder required />
                     <label for="UserName" class="form-label">
                         <span class="red">*</span> User Name
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="Email" type="email" class="form-control" placeholder required />
+                    <input id="txtEmail" asp-for="Email" type="email" class="form-control" placeholder required />
                     <label for="Email" class="form-label">
                         <span class="red">*</span> Email
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="FirstName" class="form-control" placeholder required />
+                    <input id="txtFirstName" asp-for="FirstName" class="form-control" placeholder required />
                     <label for="FirstName" class="form-label">
                         <span class="red">*</span> First Name
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="LastName" class="form-control" placeholder required />
+                    <input id="txtLastName" asp-for="LastName" class="form-control" placeholder required />
                     <label for="LastName" class="form-label">
                         <span class="red">*</span> Last Name
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="PhoneNumber" class="form-control" placeholder required />
+                    <input id="txtPhoneNumber" asp-for="PhoneNumber" class="form-control" placeholder required />
                     <label for="PhoneNumber" class="form-label">
                         <span class="red">*</span> Phone Number
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <input asp-for="Password" type="password" class="form-control" placeholder required />
+                    <input id="txtPassword" asp-for="Password" type="password" class="form-control" placeholder required />
                     <label for="Password" class="form-label">
                         <span class="red">*</span> Password
                     </label>
                 </div>
 
                 <div class="col-lg-6 form-floating">
-                    <select asp-for="IsActive" class="form-control select2" required>
+                    <select id="ddlStatus" asp-for="IsActive" class="form-control select2" required>
                         <option value="">Please select</option>
                         <option value="true">Active</option>
                         <option value="false">Inactive</option>
@@ -75,7 +77,7 @@
                     <i class="nt-backward"></i> Cancel
                 </a>
                 <div class="invite">
-                    <button type="submit" class="btn-invite">Save</button>
+                    <button type="submit" id="btnSaveUser" class="btn-invite">Save</button>
                 </div>
             </div>
         </form>

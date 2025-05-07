@@ -1,11 +1,6 @@
 ﻿
 using AutoMapper;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.Helpers;
 using TaskManagement.Core.ViewModels.Login;
 using TaskManagement.Core.ViewModels.UserManagement;
@@ -21,7 +16,7 @@ namespace TaskManagement.Bussiness.Authentication
         private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IUserRepository _userRepo;
         private readonly IRefreshTokenRepository _refreshTokenRepo;
-        private readonly Hashing _hashing;
+        private readonly Hashing _hashing;  
         private readonly IMapper _mapper;
 
         public AuthManager(Hashing hashing, JWTGenerator jwt, IHttpContextAccessor httpContextAccessor, IUserRepository userRepo, IRefreshTokenRepository refreshTokenRepo, IMapper mapper)
@@ -34,9 +29,13 @@ namespace TaskManagement.Bussiness.Authentication
             _mapper = mapper;
         }
 
+        /// <summary>
+        /// Authenticates a user using email and password. If successful, generates and returns
+        /// a new access token and refresh token. Throws UnauthorizedAccessException on failure.
+        /// </summary>
         public async Task<AuthenticationResponse> LoginAsync(string email, string password)
         {
-            var userResponse = await _userRepo.GetUserByEmailAsync(email);
+            User? userResponse = await _userRepo.GetUserByEmailAsync(email);
             UserModel user = userResponse == null ? null : _mapper.Map<UserModel>(userResponse);
 
             if (user == null || !_hashing.VerifyPassword(password, user.PasswordHash))
@@ -45,7 +44,7 @@ namespace TaskManagement.Bussiness.Authentication
             }
 
             string ip = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
-            var accessToken = _jwt.GenerateAccessToken(email, user.Id.ToString(), ip,user.Role);
+            string accessToken = _jwt.GenerateAccessToken(email, user.Id.ToString(), ip,user.Role);
 
             RefreshTokenModel refreshToken = new RefreshTokenModel
             {
@@ -64,21 +63,25 @@ namespace TaskManagement.Bussiness.Authentication
             };
         }
 
+        /// <summary>
+        /// Validates the provided refresh token, revokes it, generates new access and refresh tokens,
+        /// and returns them. Throws UnauthorizedAccessException if token or user is invalid.
+        /// </summary>
         public async Task<AuthenticationResponse> RefreshTokenAsync(string token)
         {
-            var refreshToken = _mapper.Map<RefreshTokenModel>( await _refreshTokenRepo.GetValidTokenAsync(token));
+            RefreshTokenModel refreshToken = _mapper.Map<RefreshTokenModel>( await _refreshTokenRepo.GetValidTokenAsync(token));
             if (refreshToken == null)
             {
                 throw new UnauthorizedAccessException();
             }
-            var user =_mapper.Map<UserModel>( await _userRepo.GetUserByIdAsync(refreshToken.UserId));
+            UserModel user =_mapper.Map<UserModel>( await _userRepo.GetUserByIdAsync(refreshToken.UserId));
             if (user == null)
             {
                 throw new UnauthorizedAccessException();
             }
             string ip = _httpContextAccessor.HttpContext?.Connection.RemoteIpAddress?.ToString();
 
-            var accessToken = _jwt.GenerateAccessToken(user.Email, user.Id.ToString(), ip, user.Role);
+            string accessToken = _jwt.GenerateAccessToken(user.Email, user.Id.ToString(), ip, user.Role);
             refreshToken.IsRevoked = true;
 
             await _refreshTokenRepo.UpdateAsync(_mapper.Map<RefreshToken>( refreshToken));

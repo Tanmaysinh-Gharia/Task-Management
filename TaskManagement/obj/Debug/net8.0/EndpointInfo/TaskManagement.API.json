@@ -89,29 +89,6 @@
         }
       }
     },
-    "/api/Authentication/getdata": {
-      "get": {
-        "tags": [
-          "Authentication"
-        ],
-        "parameters": [
-          {
-            "name": "X-Refresh-Token",
-            "in": "header",
-            "description": "Enter your refresh token manually",
-            "allowEmptyValue": true,
-            "schema": {
-              "type": "string"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK"
-          }
-        }
-      }
-    },
     "/api/Task/create": {
       "post": {
         "tags": [

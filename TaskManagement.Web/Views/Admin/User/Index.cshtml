@@ -10,6 +10,10 @@
 }
 
 <section class="main">
+    @await Html.PartialAsync("~/Views/Admin/User/_AddEditUser.cshtml", new TaskManagement.Core.ViewModels.UserManagement.CreateUserModel())
+    @await Html.PartialAsync("~/Views/Admin/User/_EditUser.cshtml", new TaskManagement.Core.ViewModels.UserManagement.UserViewModel())
+    @await Html.PartialAsync("~/Views/Admin/User/_ViewUser.cshtml", new TaskManagement.Core.ViewModels.UserManagement.UserViewModel())
+
     <div class="container">
         <div class="alerts-main">
             <div class="alerts-title">

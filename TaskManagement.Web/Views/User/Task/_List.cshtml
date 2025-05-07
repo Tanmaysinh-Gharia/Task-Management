@@ -1,0 +1,76 @@
+﻿@model IEnumerable<TaskManagement.Core.ViewModels.TaskManagement.TaskListItemViewModel>
+
+@foreach (var item in Model)
+{
+    <div class="alerts-content-single">
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-title">
+                    <span>@item.Title</span>
+                    <em class="nt-edit edit-name-btn" onclick="User.ShowEditOption(this)"></em>
+                    <div class="edit-name">
+                        <div class="edit-box">
+                            <input type="text" class="name-input" value="@item.Title">
+                            <button class="secondary-btn" type="button" onclick="User.CloseEditOption(this)">Cancel</button>
+                            <button class="btn-invite" type="button">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-desc">@item.Description</div>
+            </div>
+        </div>
+
+
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-desc">Due Date: @item.DueDate.ToString("yyyy-MM-dd")</div>
+            </div>
+        </div>
+
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-desc">Assigned To: @item.AssigneeName</div>
+            </div>
+        </div>
+
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-last">
+                    <span class="closed btn-all-case">
+                        <i class="nt-tick"></i>
+                        <span class="alert-text">@item.Status.ToString()</span>
+                    </span>
+
+                    <div class="edit-links">
+                        <em class="nt-more"></em>
+                        <div class="link-box">
+                            <div class="link" onclick="User.View('@item.Id')">
+                                <em class="nt-eye"></em> View 
+                            </div>
+                            <div class="link" onclick="User.Edit('@item.Id')">
+                                <em class="nt-edit"></em> Edit
+                            </div>
+                            <div class="link" onclick="User.openTaskHistoryDrawer(@item.Id)">
+                                <em class="nt-clock"></em> History
+                            </div>
+                            <div class="link" onclick="User.Delete('@item.Id')">
+                                <em class="nt-bin"></em> Delete
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<script>
+    const count = @ViewData["FilteredCount"] ?? 0;
+    $(".alerts-title h1").text(`Tasks (${count})`);
+
+    if (count < 10) {
+        $("#btnLoadMoreTasks").hide();
+    } else {
+        $("#btnLoadMoreTasks").show();
+    }
+</script>

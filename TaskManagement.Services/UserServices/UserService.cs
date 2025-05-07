@@ -1,16 +1,10 @@
 ﻿using Flurl;
 using Flurl.Http;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.ApiRoutes;
 using TaskManagement.Core.Common.ResponseHandler;
 using TaskManagement.Core.ViewModels.UserManagement;
 using TaskManagement.Services.BaseServices;
-using TaskManagement.Services.SettingsStore;
 
 namespace TaskManagement.Services.UserServices
 {
@@ -23,6 +17,9 @@ namespace TaskManagement.Services.UserServices
         {
         }
 
+        /// <summary>
+        /// Sends a request to retrieve all users. Returns a list of UserViewModel objects.
+        /// </summary>
         public async Task<List<UserViewModel>> GetAllUsersAsync()
         {
             var response = await GetAuthenticatedRequest()
@@ -33,14 +30,22 @@ namespace TaskManagement.Services.UserServices
             return _responseHandler.GetResponse<List<UserViewModel>>(response);
         }
 
+        /// <summary>
+        /// Sends a request to create a new user using the provided CreateUserModel.
+        /// </summary>
         public async Task<ApiResponse> CreateUserAsync(CreateUserModel model)
         {
+            string api = UserManagementRoutes.AddUser;
             return await GetAuthenticatedRequest()
                 .AppendPathSegment(UserManagementRoutes.AddUser)
                 .PostJsonAsync(model)
                 .ReceiveJson<ApiResponse>();
         }
 
+
+        /// <summary>
+        /// Sends a request to update an existing user using the provided UserViewModel.
+        /// </summary>
         public async Task<ApiResponse> UpdateUserAsync(UserViewModel model)
         {
             return await GetAuthenticatedRequest()
@@ -49,12 +54,28 @@ namespace TaskManagement.Services.UserServices
                 .ReceiveJson<ApiResponse>();
         }
 
+        /// <summary>
+        /// Sends a request to delete a user identified by the given ID.
+        /// </summary>
         public async Task<ApiResponse> DeleteUserAsync(int id)
         {
             return await GetAuthenticatedRequest()
                 .AppendPathSegment(UserManagementRoutes.DeleteUser.Replace("{id}", id.ToString()))
                 .DeleteAsync()
                 .ReceiveJson<ApiResponse>();
+        }
+
+        /// <summary>
+        /// Sends a request to retrieve a user by their ID. Returns a UserViewModel.
+        /// </summary>
+        public async Task<UserViewModel> GetUserByIdAsync(int id)
+        {
+            var response = await GetAuthenticatedRequest()
+                .AppendPathSegment(UserManagementRoutes.GetUserById.Replace("{id}", id.ToString()))
+                .GetAsync()
+                .ReceiveJson<ApiResponse>();
+
+            return _responseHandler.GetResponse<UserViewModel>(response);
         }
     }
 }

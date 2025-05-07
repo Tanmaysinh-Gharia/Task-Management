@@ -1,0 +1,60 @@
+﻿@model TaskManagement.Core.ViewModels.TaskManagement.TaskModel
+@using TaskManagement.Core.Enums
+
+<div class="drawer" id="drawerViewTask">
+    <div class="overlay" onclick="Common.closeDrawer('#drawerViewTask')"></div>
+
+    <div class="drawer-inner">
+        <div class="drawer-title">
+            <a title="back" onclick="Common.closeDrawer('#drawerViewTask')">
+                <i class="nt-angle-prev"></i>
+            </a>
+            <h1>Task Details</h1>
+        </div>
+        <input type="hidden" id="hiddenAssigneeId" value="@Model.AssigneeId" />
+
+        <form class="drawer-form view-drawer">
+            <div class="row">
+                <div class="form-title">Task Summary</div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Title</div>
+                    <div class="data-val">@Model.Title</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Description</div>
+                    <div class="data-val">@Model.Description</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Priority</div>
+                    <div class="data-val">@Model.Priority</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Status</div>
+                    <div class="data-val">@Model.Status</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Due Date</div>
+                    <div class="data-val">@Model.DueDate?.ToString("dd-MM-yyyy")</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Assigned To</div>
+                    <div class="data-val" id="assigneeNamePlaceholder">Loading...</div>
+                </div>
+
+            </div>
+
+            <div class="invite-botttom">
+                <a class="cancel" onclick="Common.closeDrawer('#drawerViewTask')">
+                    <i class="nt-backward"></i>
+                    Close
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

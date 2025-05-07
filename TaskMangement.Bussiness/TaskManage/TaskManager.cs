@@ -1,16 +1,10 @@
 ﻿using AutoMapper;
 using Microsoft.Extensions.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.Common.Configuration;
 using TaskManagement.Core.InjectionInterfaces;
 using TaskManagement.Core.ViewModels.TaskManagement;
 using TaskManagement.Data.Entities;
 using TaskManagement.Data.Repositories.TaskRepo;
-using TaskManagement.Data.Repositories.UserRepo;
 using TaskStatus = TaskManagement.Core.Enums.TaskStatus;
 namespace TaskManagement.Bussiness.TaskManage
 {
@@ -18,25 +12,30 @@ namespace TaskManagement.Bussiness.TaskManage
     {
         private readonly IMapper _mapper;
         private readonly ITaskRepository _taskRepo;
-        private readonly IUserRepository _userRepo;
         private readonly IUnitOfWork _unitOfWork;
         private readonly PaginationSettings _paginationSettings;
 
-        public TaskManager(IMapper mapper, ITaskRepository repo, IUserRepository userRepo, IOptions<PaginationSettings> paginationSettings,IUnitOfWork unitOfWork)
+        public TaskManager(IMapper mapper, ITaskRepository repo, IOptions<PaginationSettings> paginationSettings,IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
             _taskRepo = repo;
-            _userRepo = userRepo;
             _paginationSettings = paginationSettings.Value;
         }
 
 
+        #region Public Methods
+
+
+
+        /// <summary>
+        /// Returns a paginated and filtered list of tasks based on search, status, priority, and sort inputs.
+        /// </summary>
         public async Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model, int userId, bool isAdmin)
         {
             // Fallback to config values if not provided
-            var pageNumber = model.PageNumber > 0 ? model.PageNumber : _paginationSettings.DefaultPageNumber;
-            var pageSize = model.PageSize > 0 ? model.PageSize : _paginationSettings.DefaultPageSize;
+            int pageNumber = model.PageNumber > 0 ? model.PageNumber : _paginationSettings.DefaultPageNumber;
+            int pageSize = model.PageSize > 0 ? model.PageSize : _paginationSettings.DefaultPageSize;
 
             return await _taskRepo.GetFilteredTasksAsync(
                 model.SearchTerm,
@@ -51,9 +50,12 @@ namespace TaskManagement.Bussiness.TaskManage
             );
         }
 
+        /// <summary>
+        /// Creates a new task and assigns it to the given user. Sets timestamps accordingly.
+        /// </summary>
         public async Task AddTaskAsync(CreateTaskModel model, int creatorId)
         {
-            var entity = _mapper.Map<TaskEntity>(model);
+            TaskEntity entity = _mapper.Map<TaskEntity>(model);
             entity.CreatorId = creatorId;
             entity.CreatedAt = DateTime.Now;
             entity.UpdatedAt = entity.CreatedAt;
@@ -61,13 +63,16 @@ namespace TaskManagement.Bussiness.TaskManage
             await _taskRepo.AddAsync(entity);
         }
 
+        /// <summary>
+        /// Updates task fields and logs changes in task history. Wrapped in a transaction with rollback support.
+        /// </summary>
         public async Task UpdateTaskAsync(TaskModel model, int userId, bool isAdmin)
         {
             await _unitOfWork.BeginTransactionAsync();
 
             try
             {
-                var task = await _taskRepo.GetByIdAsync(model.Id);
+                TaskEntity? task = await _taskRepo.GetByIdAsync(model.Id);
                 if (task == null)
                     throw new Exception("Task not found");
 
@@ -76,8 +81,8 @@ namespace TaskManagement.Bussiness.TaskManage
 
 
 
-                var now = DateTime.Now;
-                var changes = new List<TaskDetail>();
+                DateTime now = DateTime.Now;
+                List<TaskDetail> changes = new List<TaskDetail>();
 
                 if (!string.IsNullOrWhiteSpace(model.Title) && model.Title != task.Title)
                 {
@@ -130,6 +135,9 @@ namespace TaskManagement.Bussiness.TaskManage
             }
         }
 
+        /// <summary>
+        /// Marks a task as deleted, logs the change, and restricts deletion based on user role and task type.
+        /// </summary>
         public async Task DeleteTaskAsync(int taskId, int deletedByUserId, bool isAdmin)
         {
             await _unitOfWork.BeginTransactionAsync();
@@ -137,7 +145,7 @@ namespace TaskManagement.Bussiness.TaskManage
             try
             {
                 int userId = deletedByUserId;
-                var task = await _taskRepo.GetByIdAsync(taskId);
+                TaskEntity? task = await _taskRepo.GetByIdAsync(taskId);
                 if (task == null || task.IsDeleted)
                     throw new Exception("Task not found or already deleted");
 
@@ -153,7 +161,7 @@ namespace TaskManagement.Bussiness.TaskManage
 
                 await _taskRepo.UpdateAsync(task);
 
-                var history = new TaskDetail
+                TaskDetail history = new TaskDetail
                 {
                     TaskId = task.Id,
                     UpdatedById = deletedByUserId,
@@ -174,36 +182,24 @@ namespace TaskManagement.Bussiness.TaskManage
             }
         }
 
-
+        /// <summary>
+        /// Changes the status of a task and logs the change. Verifies access control based on role and ownership.
+        /// </summary>
         public async Task ChangeTaskStatusAsync(int id, TaskStatus status, int userId, bool isAdmin)
         {
-            //var task = await _taskRepo.GetByIdAsync(id);
-            //if (task == null || task.IsDeleted) throw new Exception("Task not found");
-
-
-            //if (!isAdmin && task.AssigneeId != userId)
-            //    throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
-
-            //task.Status = status;
-            //task.UpdatedAt = DateTime.Now;
-            //await _taskRepo.UpdateAsync(task);
-
-
-
-
-
+           
             await _unitOfWork.BeginTransactionAsync();
             try
             {
-                var task = await _taskRepo.GetByIdAsync(id);
+                TaskEntity? task = await _taskRepo.GetByIdAsync(id);
                 if (task == null || task.IsDeleted) throw new Exception("Task not found");
 
 
                 if (!isAdmin && task.AssigneeId != userId)
                     throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
 
-                var now = DateTime.Now;
-                var changes = new List<TaskDetail>();
+                DateTime now = DateTime.Now;
+                List<TaskDetail> changes = new List<TaskDetail>();
                 
                 if(status == null)
                 {
@@ -236,10 +232,12 @@ namespace TaskManagement.Bussiness.TaskManage
             }
         }
 
-
+        /// <summary>
+        /// Returns the complete change history of a task, including its creation and all updates/deletions.
+        /// </summary>
         public async Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int requesterId, bool isAdmin)
         {
-            var task = await _taskRepo.GetWithUserAsync(taskId);
+            TaskEntity? task = await _taskRepo.GetWithUserAsync(taskId);
             if (task == null || task.IsDeleted)
                 throw new Exception("Task not found");
 
@@ -253,7 +251,7 @@ namespace TaskManagement.Bussiness.TaskManage
                     throw new UnauthorizedAccessException("User not allowed to view this task history.");
             }
 
-            var history = new List<TaskDetailViewModel>();
+            List<TaskDetailViewModel> history = new List<TaskDetailViewModel>();
 
             // 1️ Add creation snapshot
             history.Add(new TaskDetailViewModel
@@ -266,7 +264,7 @@ namespace TaskManagement.Bussiness.TaskManage
             });
 
             // 2️ Add updates & deletion logs
-            var details = await _taskRepo.GetTaskDetailsAsync(taskId);
+            List<TaskDetail> details = await _taskRepo.GetTaskDetailsAsync(taskId);
 
             history.AddRange(details.Select(d => new TaskDetailViewModel
             {
@@ -280,9 +278,12 @@ namespace TaskManagement.Bussiness.TaskManage
             return history.OrderBy(h => h.ChangeTime).ToList();
         }
 
+        /// <summary>
+        /// Retrieves a single task by ID, validating access based on task ownership and user role.
+        /// </summary>
         public async Task<TaskModel> GetTaskByIdAsync(int taskId, int requesterId, bool isAdmin)
         {
-            var task = await _taskRepo.GetWithUserAsync(taskId);
+            TaskEntity? task = await _taskRepo.GetWithUserAsync(taskId);
             if (task == null || task.IsDeleted)
                 throw new Exception("Task not found");
 
@@ -305,9 +306,12 @@ namespace TaskManagement.Bussiness.TaskManage
             return _mapper.Map<TaskModel>(task);
         }
 
-
+        #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Structrual Method the gives the TaskDetail object according to the parameters
+        /// </summary>
         private TaskDetail CreateDetail(int taskId, int updaterId, string field, string? oldVal, string? newVal, DateTime time)
         {
             return new TaskDetail

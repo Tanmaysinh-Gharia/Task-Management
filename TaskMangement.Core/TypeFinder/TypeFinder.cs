@@ -73,7 +73,6 @@ namespace TaskManagement.Core.TypeFinder
                 {
                     if (!reference.FullName.StartsWith("TaskManagement."))
                         continue;
-
                     try
                     {
                         var referencedAssembly = Assembly.Load(reference);

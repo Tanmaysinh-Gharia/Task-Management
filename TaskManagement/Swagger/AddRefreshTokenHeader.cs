@@ -5,6 +5,12 @@ namespace TaskManagement.API.Swagger
 {
     public class AddRefreshTokenHeader : IOperationFilter
     {
+        /// <summary>
+        /// Adds a custom optional header parameter "X-Refresh-Token" to Swagger documentation
+        /// if it's not already present. This allows users to manually provide a refresh token
+        /// in the request headers during testing via Swagger UI.
+        /// </summary>
+
         public void Apply(OpenApiOperation operation, OperationFilterContext context)
         {
             operation.Parameters ??= new List<OpenApiParameter>();

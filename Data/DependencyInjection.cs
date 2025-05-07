@@ -1,11 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.InjectionInterfaces;
 using TaskManagement.Data.Context;
 using TaskManagement.Data.Repositories.RefreshTokenRepo;
@@ -17,6 +12,9 @@ namespace TaskManagement.Data
     public class DependencyInjection : IDependencyInjection
     {
         #region Public Methods
+        /// <summary>
+        /// Registers database context and repository dependencies for the data layer.
+        /// </summary>
         public virtual void Register(
             IServiceCollection serviceCollection, 
             IConfiguration configuration)
@@ -36,23 +34,39 @@ namespace TaskManagement.Data
             #endregion
         }
 
+        /// <summary>
+        /// Specifies the registration order for the data layer (value = 3).
+        /// </summary>
         public int Order => 3;
 
         #endregion
 
         #region Private Methods
+        /// <summary>
+        /// Registers the user repository interface and implementation.
+        /// </summary>
         private static void AddUserRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUserRepository, UserRepository>();
         }
+
+        /// <summary>
+        /// Registers the refresh token repository interface and implementation.
+        /// </summary>
         private static void AddRefreshTokenRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IRefreshTokenRepository, RefreshTokenRepository>();
         }
+        /// <summary>
+        /// Registers the task repository interface and implementation.
+        /// </summary>
         private static void AddTaskRepository(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<ITaskRepository, TaskRepository>();
         }
+        /// <summary>
+        /// Registers the unit of work interface and implementation for transaction support.
+        /// </summary>
         private static void AddTransaction(IServiceCollection serviceCollection)
         {
             serviceCollection.AddScoped<IUnitOfWork, UnitOfWork>();

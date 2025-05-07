@@ -133,21 +133,22 @@ namespace TaskManagement.Web.Controllers
 
         #endregion
 
-
         #region User API Calls
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser([FromBody] CreateUserModel model)
+        public async Task<IActionResult> CreateUser(CreateUserModel model)
         {
             await _userService.CreateUserAsync(model);
-            return RedirectToAction("Users");
+            return Ok(new { success = true, message = "User created successfully" });
+            ;
         }
 
         [HttpPost]
         public async Task<IActionResult> UpdateUser(UserViewModel model)
         {
             await _userService.UpdateUserAsync(model);
-            return RedirectToAction("Users");
+
+            return Ok(new { success = true, message = "User updated successfully" });
         }
 
         [HttpPost]

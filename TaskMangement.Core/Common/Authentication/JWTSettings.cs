@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace TaskManagement.Core.Common.Authentication
+﻿namespace TaskManagement.Core.Common.Authentication
 {
+    /// <summary>
+    /// Holds JWT token configuration such as secret key, issuer, audience, and expiration settings.
+    /// Populated via appsettings.json.
+    /// </summary>
     public class JWTSettings
     {
         public string Key { get; set; }

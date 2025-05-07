@@ -11,8 +11,19 @@ using TaskManagement.Core.TypeFinder;
 
 namespace TaskManagement.Core
 {
+    /// <summary>
+    /// Responsible for registering dependencies across all layers dynamically
+    /// using classes that implement IDependencyInjection interface.
+    /// </summary>
     public static class DependencyRegistrar
     {
+        /// <summary>
+        /// Scans the application using the provided ITypeFinder to locate all implementations
+        /// of IDependencyInjection, sorts them by their Order, and invokes their Register method.
+        /// </summary>
+        /// <param name="services">The IServiceCollection to register services into.</param>
+        /// <param name="typeFinder">Used to find all types implementing IDependencyInjection.</param>
+        /// <param name="configuration">Application configuration instance.</param>
         public static void RegisterDependencies(
             this IServiceCollection services, 
             ITypeFinder typeFinder, 
@@ -34,35 +45,11 @@ namespace TaskManagement.Core
 
         }
 
-        //public static void RegisterMappings(this IServiceCollection services, ITypeFinder typeFinder)
-        //{
-        //    //to map nested objects
-        //    TypeAdapterConfig.GlobalSettings.Default.PreserveReference(true);
 
-        //    //to ignore null values while mapping
-        //    TypeAdapterConfig.GlobalSettings.Default.IgnoreNullValues(true);
-
-        //    //configure mapster
-        //    services.AddSingleton(TypeAdapterConfig.GlobalSettings);
-
-        //    //add mapper to map object using IMapper
-        //    services.AddScoped<IMapper, Mapper>();
-
-        //    //find mapper profile types configurations provided by other assemblies
-        //    IEnumerable<Type> mapperProfileTypes = typeFinder.FindClassesOfType<IMapperProfile>();
-
-        //    //create instances of mapper profiles
-        //    IEnumerable<IMapperProfile> mapperProfiles = mapperProfileTypes
-        //        .Select(m => (IMapperProfile)Activator.CreateInstance(m));
-
-        //    //add profiles
-        //    foreach (IMapperProfile profile in mapperProfiles)
-        //    {
-        //        profile?.MapProfile();
-        //    }
-        //}
-
-
+        /// <summary>
+        /// Registers all AutoMapper profiles available in the current application domain's assemblies.
+        /// </summary>
+        /// <param name="services">The IServiceCollection to register AutoMapper with.</param>
         public static void RegisterMappings(this IServiceCollection services)
         {
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());

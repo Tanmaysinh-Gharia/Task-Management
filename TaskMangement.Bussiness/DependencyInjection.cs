@@ -1,11 +1,5 @@
-﻿using Microsoft.AspNetCore.RequestDecompression;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Bussiness.Authentication;
 using TaskManagement.Bussiness.TaskManage;
 using TaskManagement.Bussiness.UserManage;
@@ -16,6 +10,10 @@ namespace TaskManagement.Bussiness
     public class DependencyInjection : IDependencyInjection
     {
         #region Public Methods
+        /// <summary>
+        /// Registers all business layer dependencies including managers for auth, user, and task.
+        /// Called during application startup.
+        /// </summary>
         public void Register(
             IServiceCollection serviceCollection, 
             IConfiguration configuration)
@@ -30,20 +28,25 @@ namespace TaskManagement.Bussiness
 
             //AddRefreshTokenCleanupService(serviceDescriptors, configuration);
             #endregion
-            // Register your services here
-            // Example: serviceCollection.AddScoped<IMyService, MyService>();
         }
-        
+
+        /// <summary>
+        /// Gets the execution order for dependency registration.
+        /// </summary>
         public int Order => 1;
         #endregion
 
         #region Private Methods
-
+        /// <summary>
+        /// Registers the authentication manager service (IAuthManager → AuthManager).
+        /// </summary>
         private static void AddAuthentication(IServiceCollection services)
         {
             services.AddScoped<IAuthManager, AuthManager>();
         }
-
+        /// <summary>
+        /// Configures and registers the refresh token cleanup background service (currently commented).
+        /// </summary>
         private static void AddRefreshTokenCleanupService(IServiceCollection services, IConfiguration configuration)
         {
             services.Configure<RefreshTokenCleanupSettings>(configuration.GetSection("BackgroundService:CleanUp:RefreshToken"));
@@ -51,11 +54,17 @@ namespace TaskManagement.Bussiness
             //services.AddHostedService<RefreshTokenCleanupService>();
         }
 
+        /// <summary>
+        /// Registers the user manager service (IUserManager → UserManager).
+        /// </summary>
         private static void AddUserManager(IServiceCollection services)
         {
             services.AddScoped<IUserManager, UserManager>();
         }
 
+        /// <summary>
+        /// Registers the task manager service (ITaskManager → TaskManager).
+        /// </summary>
         private static void AddTaskManager(IServiceCollection services)
         {
             services.AddScoped<ITaskManager, TaskManager>();

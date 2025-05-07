@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 using TaskManagement.Core.ViewModels.Login;
 using TaskManagement.Services.LoginServices;
 
@@ -56,8 +57,28 @@ namespace TaskManagement.Web.Controllers
                     SameSite = SameSiteMode.Strict
                 });
 
-                // Redirect to home or dashboard
-                return RedirectToAction("Home", "Admin");
+                Response.Cookies.Append("IsLoggedIn", "true", new CookieOptions
+                {
+                    HttpOnly = false, // Can be read in Razor
+                    Secure = true,
+                    SameSite = SameSiteMode.Strict
+                });
+
+
+
+
+                var handler = new System.IdentityModel.Tokens.Jwt.JwtSecurityTokenHandler();
+                var token = handler.ReadJwtToken(response.AccessToken);
+                var role = token.Claims.FirstOrDefault(c => c.Type == ClaimTypes.Role)?.Value;
+
+                TempData["UserRole"] = role; // Pass it to layout
+
+                return role switch
+                {
+                    "Admin" => RedirectToAction("Home", "Admin"),
+                    "User" => RedirectToAction("Home", "User"),
+                    _ => RedirectToAction("Login")
+                };
             }
             catch
             {
@@ -69,14 +90,21 @@ namespace TaskManagement.Web.Controllers
         /// <summary>
         /// Clears cookies and logs the user out.
         /// </summary>
-        [HttpGet]
+        [HttpPost]
         public IActionResult Logout()
         {
             Response.Cookies.Delete("AccessToken");
             Response.Cookies.Delete("RefreshToken");
+            Response.Cookies.Delete("IsLoggedIn");
+
             return RedirectToAction("Login");
         }
 
+        [HttpGet]
+        public IActionResult Error()
+        {
+            return View("~/Views/Shared/Error.cshtml");
+        }
         #endregion
     }
 

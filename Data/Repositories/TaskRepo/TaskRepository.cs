@@ -19,24 +19,38 @@ namespace TaskManagement.Data.Repositories.TaskRepo
             _context = context;
         }
 
+        /// <summary>
+        /// Retrieves a non-deleted task by its ID.
+        /// </summary>
+
         public async Task<TaskEntity?> GetByIdAsync(int id)
         {
             return await _context.Tasks
                 .FirstOrDefaultAsync(t => t.Id == id && !t.IsDeleted);
         }
 
+
+        /// <summary>
+        /// Adds a new task entity to the database and saves changes.
+        /// </summary>
         public async Task AddAsync(TaskEntity task)
         {
             await _context.Tasks.AddAsync(task);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Updates an existing task entity and persists changes.
+        /// </summary>
         public async Task UpdateAsync(TaskEntity task)
         {
             _context.Tasks.Update(task);
             await _context.SaveChangesAsync();
         }
 
+        /// <summary>
+        /// Soft deletes a task by setting IsDeleted to true.
+        /// </summary>
         public async Task DeleteAsync(int id)
         {
             var task = await GetByIdAsync(id);
@@ -47,7 +61,9 @@ namespace TaskManagement.Data.Repositories.TaskRepo
             }
         }
 
-
+        /// <summary>
+        /// Adds a list of task detail records for history tracking and saves them.
+        /// </summary>
         public async Task AddTaskDetailsAsync(List<TaskDetail> details)
         {
             await _context.TaskDetails.AddRangeAsync(details);
@@ -55,6 +71,9 @@ namespace TaskManagement.Data.Repositories.TaskRepo
         }
 
 
+        /// <summary>
+        /// Executes a stored procedure to fetch filtered, sorted, and paginated task list based on user role and input criteria.
+        /// </summary>
         public async Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(
             string? searchTerm,
             int? status,
@@ -82,6 +101,9 @@ namespace TaskManagement.Data.Repositories.TaskRepo
         }
 
 
+        /// <summary>
+        /// Retrieves the history (change log) of a task with proper role-based access control.
+        /// </summary>
         public async Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int currentUserId, bool isAdmin)
         {
             var task = await _context.Tasks.FindAsync(taskId);
@@ -111,7 +133,9 @@ namespace TaskManagement.Data.Repositories.TaskRepo
                           }).ToListAsync();
         }
 
-
+        /// <summary>
+        /// Retrieves a task along with its Creator and Assignee navigation properties.
+        /// </summary>
         public async Task<TaskEntity?> GetWithUserAsync(int taskId)
         {
             return await _context.Tasks
@@ -120,6 +144,9 @@ namespace TaskManagement.Data.Repositories.TaskRepo
                 .FirstOrDefaultAsync(t => t.Id == taskId && !t.IsDeleted);
         }
 
+        /// <summary>
+        /// Retrieves all task detail records for a given task, ordered by change time.
+        /// </summary>
         public async Task<List<TaskDetail>> GetTaskDetailsAsync(int taskId)
         {
             return await _context.TaskDetails

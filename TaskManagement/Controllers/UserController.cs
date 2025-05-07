@@ -7,6 +7,9 @@ using TaskManagement.Core.ViewModels.UserManagement;
 
 namespace TaskManagement.API.Controllers
 {
+    /// <summary>
+    /// All user apis are only accessible by admin 
+    ///</summary>
     [ApiController]
     [Route("api/[controller]")]
     [Authorize(Roles = "Admin")]
@@ -21,12 +24,15 @@ namespace TaskManagement.API.Controllers
             _logger = logger;
         }
 
+        /// <summary>
+        /// Retrieves a list of all users. Only accessible by Admins.
+        /// </summary>
         [HttpGet(UserManagementRoutes.GetUsers)]
         public async Task<IActionResult> GetAllUsers()
         {
             try
             {
-                var users = await _userManager.GetAllUsersAsync();
+                IEnumerable<UserViewModel> users = await _userManager.GetAllUsersAsync();
                 return Ok(ResponseBuilder.Success(users));
             }
             catch (Exception ex)
@@ -36,23 +42,9 @@ namespace TaskManagement.API.Controllers
             }
         }
 
-        //[HttpGet(UserManagementRoutes.GetUserById)]
-        //public async Task<IActionResult> GetUserById(int id)
-        //{
-        //    try
-        //    {
-        //        var user = await _userManager.GetUserByIdAsync(id);
-        //        return user == null
-        //            ? NotFound(ResponseBuilder.NotFound("User not found."))
-        //            : Ok(ResponseBuilder.Success(user));
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        _logger.LogError(ex, $"Error fetching user by ID: {id}.");
-        //        return StatusCode(500, ResponseBuilder.Error("An error occurred while retrieving the user.", ex));
-        //    }
-        //}
-
+        /// <summary>
+        /// Adds a new user to the system. Only accessible by Admins.
+        /// </summary>
         [HttpPost(UserManagementRoutes.AddUser)]
         public async Task<IActionResult> AddUser([FromBody] CreateUserModel model)
         {
@@ -68,6 +60,9 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+        /// <summary>
+        /// Updates an existing user's details. Only accessible by Admins.
+        /// </summary>
         [HttpPut(UserManagementRoutes.UpdateUser)]
         public async Task<IActionResult> UpdateUser([FromBody] UserViewModel userModel)
         {
@@ -83,12 +78,16 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Deletes a user by ID after checking existence. Only accessible by Admins.
+        /// </summary>
         [HttpDelete(UserManagementRoutes.DeleteUser)]
         public async Task<IActionResult> DeleteUser(int id)
         {
             try
             {
-                var exists = await _userManager.UserExistsAsync(id);
+                bool exists = await _userManager.UserExistsAsync(id);
                 if (!exists)
                     return NotFound(ResponseBuilder.NotFound("User not found."));
 
@@ -101,5 +100,6 @@ namespace TaskManagement.API.Controllers
                 return StatusCode(500, ResponseBuilder.Error("An error occurred while deleting the user.", ex));
             }
         }
+    
     }
 }

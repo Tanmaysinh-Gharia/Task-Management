@@ -17,8 +17,6 @@ namespace TaskManagement.API
         {
             var builder = WebApplication.CreateBuilder(args);
 
-
-
             // Load JWT settings
             builder.Services.Configure<JWTSettings>(builder.Configuration.GetSection("Jwt"));
             var jwtSettings = builder.Configuration.GetSection("Jwt").Get<JWTSettings>();
@@ -26,7 +24,7 @@ namespace TaskManagement.API
             // Register Dependency Injection
             ITypeFinder typeFinder = new TypeFinder();
 
-            builder.Services.AddSingleton<ITypeFinder>(typeFinder);
+            builder.Services.AddSingleton(typeFinder);
 
 
             // Register other services from all layers

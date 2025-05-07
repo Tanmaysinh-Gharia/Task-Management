@@ -1,9 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.Helpers;
 using TaskManagement.Core.ViewModels.TaskManagement;
 using TaskManagement.Data.Configurations;

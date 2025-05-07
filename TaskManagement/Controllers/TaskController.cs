@@ -5,11 +5,14 @@ using TaskManagement.Bussiness.TaskManage;
 using TaskManagement.Core.ApiRoutes;
 using TaskManagement.Core.Common.ResponseHandler;
 using TaskManagement.Core.ViewModels.TaskManagement;
-using TaskManagement.Data.Entities;
-using TaskManagement.Core.Enums;
 using TaskStatus = TaskManagement.Core.Enums.TaskStatus;
 namespace TaskManagement.API.Controllers
 {
+
+    /// <summary>
+    /// For Each of the request we open up access token and according to user role and requested tasks 
+    /// we check if the user is authorized to perform the action.
+    /// Suppose Admin can't able to see user's personal tasks and user can't able to see other user's tasks.
     [ApiController]
     [Route("api/[controller]")]
     [Authorize]
@@ -27,16 +30,17 @@ namespace TaskManagement.API.Controllers
         }
 
 
-
+        /// <summary>
+        /// Creates a new task. Only Admins can assign to others; users can assign only to themselves.
+        /// </summary>
         [HttpPost(TaskManagementRoutes.Create)]
         public async Task<IActionResult> Create([FromBody] CreateTaskModel model)
         {
             try
             {
-                var userId = GetUserId();
-                var creatorId = userId;
+                int userId= GetUserId();
+                int creatorId = userId;
 
-                var role = User.FindFirst(ClaimTypes.Role)?.Value;
                 if (!IsAdmin() && model.AssigneeId != creatorId)
                 {
                     return BadRequest(ResponseBuilder.Error("You can only assign tasks to yourself."));
@@ -52,7 +56,9 @@ namespace TaskManagement.API.Controllers
         }
 
 
-
+        /// <summary>
+        /// Updates the task by ID. Access restricted by user role and assignment.
+        /// </summary>
         [HttpPut(TaskManagementRoutes.Update)]
         public async Task<IActionResult> Update(int id, [FromBody] TaskModel model)
         {
@@ -60,7 +66,6 @@ namespace TaskManagement.API.Controllers
             {
                 model.Id = id;
                 model.UpdatedById = GetUserId();
-                var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
                 await _taskManager.UpdateTaskAsync(model, model.UpdatedById, IsAdmin());
                 return Ok(ResponseBuilder.Success("Task updated successfully."));
@@ -77,13 +82,15 @@ namespace TaskManagement.API.Controllers
         }
 
 
-
+        /// <summary>
+        /// Deletes the task by ID. Allowed for Admins or task creators.
+        /// </summary>
         [HttpDelete(TaskManagementRoutes.Delete)]
         public async Task<IActionResult> Delete(int id)
         {
             try
             {
-                var userId = GetUserId();
+                int userId= GetUserId();
 
                 await _taskManager.DeleteTaskAsync(id, userId, IsAdmin());
                 return Ok(ResponseBuilder.Success("Task deleted successfully."));
@@ -99,6 +106,10 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Changes the status of a task by ID. Authorization depends on user role and assignment.
+        /// </summary>
         [HttpPut(TaskManagementRoutes.ChangeStatus)]
         public async Task<IActionResult> ChangeStatus(int id, [FromQuery] TaskStatus status)
         {
@@ -118,14 +129,21 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Returns a filtered list of tasks based on the applied filters (search, sort, pagination) and 
+        /// also according to user role if 
+        /// ROLE == USER then only gets tasks which have assignID as as useritself.
+        /// ROLE == ADMIN then gets all tasks.
+        /// </summary>
         [HttpPost(TaskManagementRoutes.FilteredList)]
         public async Task<IActionResult> GetFilteredList([FromBody] TaskFilterModel model)
         {
             try
             {
 
-                var userId = GetUserId();
-                var result = await _taskManager.GetFilteredTasksAsync(model, userId, IsAdmin());
+                int userId= GetUserId();
+                List<TaskListItemViewModel> result = await _taskManager.GetFilteredTasksAsync(model, userId, IsAdmin());
                 return Ok(ResponseBuilder.Success(result));
             }
             catch (Exception ex)
@@ -135,7 +153,9 @@ namespace TaskManagement.API.Controllers
             }
         }
 
-
+        /// <summary>
+        /// Retrieves full history of a task by ID. Only authorized users (admin or related) can access.
+        /// </summary>
         [HttpGet(TaskManagementRoutes.History)]
         public async Task<IActionResult> GetTaskHistory(int id)
         {
@@ -144,7 +164,7 @@ namespace TaskManagement.API.Controllers
                 int userId = GetUserId();
                 bool isAdmin = IsAdmin();
 
-                var result = await _taskManager.GetTaskHistoryAsync(id, userId, isAdmin);
+                List<TaskDetailViewModel> result = await _taskManager.GetTaskHistoryAsync(id, userId, isAdmin);
                 return Ok(ResponseBuilder.Success(result));
             }
             catch (UnauthorizedAccessException)
@@ -158,12 +178,16 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Retrieves task details by ID. Access depends on whether user is assigned or is an admin.
+        /// </summary>
         [HttpGet(TaskManagementRoutes.GetTask)]
         public async Task<IActionResult> GetTask(int id)
         {
             try
             {
-                var userId = GetUserId();
+                int userId= GetUserId();
                 TaskModel task = await _taskManager.GetTaskByIdAsync(id, userId, IsAdmin());
                 return Ok(ResponseBuilder.Success(task));
             }

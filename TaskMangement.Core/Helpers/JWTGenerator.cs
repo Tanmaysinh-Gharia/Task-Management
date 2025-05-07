@@ -1,13 +1,9 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Security.Cryptography;
 using System.Text;
-using System.Threading.Tasks;
 using TaskManagement.Core.Enums;
 
 namespace TaskManagement.Core.Helpers
@@ -21,7 +17,11 @@ namespace TaskManagement.Core.Helpers
         {
             _config = config;
         }
-
+        
+        /// <summary>
+        /// Generates a JWT access token containing user ID, email, role, and IP address claims.
+        /// Token expiration and signing credentials are derived from configuration.
+        /// </summary>
         public string GenerateAccessToken(string email, string id, string ipAddress, Role userRole)
         {
             List<Claim> claims = new List<Claim>
@@ -50,7 +50,9 @@ namespace TaskManagement.Core.Helpers
             return serializedToken;
         }
 
-
+        /// <summary>
+        /// Generates a secure, random 64-byte refresh token encoded in Base64 format.
+        /// </summary>
         public string GenerateRefreshToken()
         {
             // Generate a random 64-byte string and convert it to Base64
