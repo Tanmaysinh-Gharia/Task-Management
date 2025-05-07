@@ -37,7 +37,7 @@ namespace TaskManagement.API.Controllers
                 var creatorId = userId;
 
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
-                if ( !IsAdmin() && model.AssigneeId != creatorId)
+                if (!IsAdmin() && model.AssigneeId != creatorId)
                 {
                     return BadRequest(ResponseBuilder.Error("You can only assign tasks to yourself."));
                 }
@@ -62,7 +62,7 @@ namespace TaskManagement.API.Controllers
                 model.UpdatedById = GetUserId();
                 var role = User.FindFirst(ClaimTypes.Role)?.Value;
 
-                await _taskManager.UpdateTaskAsync(model,model.UpdatedById,IsAdmin());
+                await _taskManager.UpdateTaskAsync(model, model.UpdatedById, IsAdmin());
                 return Ok(ResponseBuilder.Success("Task updated successfully."));
             }
             catch (UnauthorizedAccessException uex)
@@ -85,7 +85,7 @@ namespace TaskManagement.API.Controllers
             {
                 var userId = GetUserId();
 
-                await _taskManager.DeleteTaskAsync(id,userId,IsAdmin());
+                await _taskManager.DeleteTaskAsync(id, userId, IsAdmin());
                 return Ok(ResponseBuilder.Success("Task deleted successfully."));
             }
             catch (UnauthorizedAccessException uex)
@@ -125,7 +125,7 @@ namespace TaskManagement.API.Controllers
             {
 
                 var userId = GetUserId();
-                var result = await _taskManager.GetFilteredTasksAsync(model,userId,IsAdmin());
+                var result = await _taskManager.GetFilteredTasksAsync(model, userId, IsAdmin());
                 return Ok(ResponseBuilder.Success(result));
             }
             catch (Exception ex)
@@ -158,5 +158,24 @@ namespace TaskManagement.API.Controllers
             }
         }
 
+        [HttpGet(TaskManagementRoutes.GetTask)]
+        public async Task<IActionResult> GetTask(int id)
+        {
+            try
+            {
+                var userId = GetUserId();
+                TaskModel task = await _taskManager.GetTaskByIdAsync(id, userId, IsAdmin());
+                return Ok(ResponseBuilder.Success(task));
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching task");
+                return StatusCode(500, ResponseBuilder.Error("Error fetching task", ex));
+            }
+        }
     }
 }

@@ -16,5 +16,7 @@ namespace TaskManagement.Services.TaskServices
         Task<ApiResponse> ChangeStatusAsync(int id, int status);
         Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model);
         Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId);
+        Task<TaskModel> GetTaskByIdAsync(int id);
+
     }
 }

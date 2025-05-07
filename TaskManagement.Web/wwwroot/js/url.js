@@ -13,6 +13,7 @@ var Url = {
     TaskUpdate: "Task/Update",
     TaskDelete: "Task/Delete",
     TaskDetails: "Task/Details",
+    GetAllTasks: "Task/Filter",
     //#endregion
 
 }

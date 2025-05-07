@@ -15,5 +15,6 @@ namespace TaskManagement.Core.ApiRoutes
         public const string ChangeStatus = "change-status/{id}";
         public const string FilteredList = "list";
         public const string History = "history/{id}";
+        public const string GetTask = "get/{id}";
     }
 }

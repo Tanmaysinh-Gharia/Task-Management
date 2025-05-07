@@ -17,6 +17,8 @@ namespace TaskManagement.Bussiness.TaskManage
 
         Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int userId, bool isAdmin);
 
+        Task<TaskModel> GetTaskByIdAsync(int taskId, int requesterId, bool isAdmin);
+
     }
 
 }

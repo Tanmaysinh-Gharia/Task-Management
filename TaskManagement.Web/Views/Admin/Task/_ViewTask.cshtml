@@ -11,6 +11,7 @@
             </a>
             <h1>Task Details</h1>
         </div>
+        <input type="hidden" id="hiddenAssigneeId" value="@Model.AssigneeId" />
 
         <form class="drawer-form view-drawer">
             <div class="row">
@@ -43,8 +44,9 @@
 
                 <div class="col-lg-6 data-detail">
                     <div class="data-label">Assigned To</div>
-                    <div class="data-val">@Model.AssigneeId</div>
+                    <div class="data-val" id="assigneeNamePlaceholder">Loading...</div>
                 </div>
+
             </div>
 
             <div class="invite-botttom">

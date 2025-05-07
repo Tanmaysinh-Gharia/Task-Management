@@ -71,11 +71,9 @@ namespace TaskManagement.Bussiness.TaskManage
                 if (task == null)
                     throw new Exception("Task not found");
 
-                if (isAdmin && task.CreatorId == task.AssigneeId)
+                if (isAdmin && task.CreatorId == task.AssigneeId && task.CreatorId != userId)
                     throw new UnauthorizedAccessException("Admins cannot update personal tasks.");
 
-                if (isAdmin && task.CreatorId == task.AssigneeId)
-                    throw new UnauthorizedAccessException("Admins cannot update personal tasks.");
 
 
                 var now = DateTime.Now;
@@ -280,6 +278,31 @@ namespace TaskManagement.Bussiness.TaskManage
             }));
 
             return history.OrderBy(h => h.ChangeTime).ToList();
+        }
+
+        public async Task<TaskModel> GetTaskByIdAsync(int taskId, int requesterId, bool isAdmin)
+        {
+            var task = await _taskRepo.GetWithUserAsync(taskId);
+            if (task == null || task.IsDeleted)
+                throw new Exception("Task not found");
+
+            bool isPersonalTask = task.CreatorId == task.AssigneeId;
+            bool isAssignedToRequester = task.AssigneeId == requesterId;
+
+            if (!isAdmin)
+            {
+                // Regular users can view only their assigned or personal tasks
+                if (!isAssignedToRequester && !(isPersonalTask && task.CreatorId == requesterId))
+                    throw new UnauthorizedAccessException("You are not allowed to view this task");
+            }
+            else
+            {
+                // Admins cannot access personal tasks created and assigned to same user unless they are the same user
+                if (isPersonalTask && task.CreatorId != requesterId)
+                    throw new UnauthorizedAccessException("Admins cannot access user personal tasks");
+            }
+
+            return _mapper.Map<TaskModel>(task);
         }
 
 

@@ -56,42 +56,64 @@ namespace TaskManagement.Web.Controllers
         [HttpGet]
         public async Task<IActionResult> Edit(int id)
         {
-            var history = await _taskService.GetTaskHistoryAsync(id);
-            ViewBag.History = history;
-            return PartialView("~/Views/Admin/Task/_AddEditTask.cshtml");
+            try
+            {
+                var task = await _taskService.GetTaskByIdAsync(id);
+                return PartialView("~/Views/Admin/Task/_AddEditTask.cshtml",task);
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid("You are not authorized to view this task.");
+            }
+            catch (Exception ex)
+            {
+                //_logger.LogError(ex, "Error retrieving task");
+                return StatusCode(500, "An error occurred while retrieving the task.");
+            }
+
         }
 
         [HttpGet]
         public async Task<IActionResult> ViewTask(int id)
         {
-            var history = await _taskService.GetTaskHistoryAsync(id);
-            ViewBag.History = history;
-            return PartialView("~/Views/Admin/Task/_ViewTask.cshtml");
+            var task = await _taskService.GetTaskByIdAsync(id);
+            return PartialView("~/Views/Admin/Task/_ViewTask.cshtml",task);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> History(int id)
+        {
+            var history = await _taskService.GetTaskHistoryAsync(id);
+            return PartialView("~/Views/Admin/Task/_TaskHistory.cshtml", history);
+        }
+
 
         #endregion
 
         #region Task API Calls
 
         [HttpPost]
-        public async Task<IActionResult> Create(CreateTaskModel model)
+        public async Task<IActionResult> Create( CreateTaskModel model)
         {
+            if (model == null)
+                return BadRequest("Model is null");
             await _taskService.CreateTaskAsync(model);
-            return RedirectToAction("TaskIndex");
+
+            return Ok(new { success = true, message = "Task created successfully" });
         }
 
         [HttpPost]
-        public async Task<IActionResult> Update(int id, TaskModel model)
+        public async Task<IActionResult> Update(TaskModel model)
         {
-            await _taskService.UpdateTaskAsync(id, model);
-            return RedirectToAction("TaskIndex");
+            var response = await _taskService.UpdateTaskAsync(model.Id, model);
+            return  Ok(new { success = true, message = "Task Updated successfully" });
         }
 
         [HttpPost]
         public async Task<IActionResult> Delete(int id)
         {
             await _taskService.DeleteTaskAsync(id);
-            return RedirectToAction("TaskIndex");
+            return RedirectToAction("Task");
         }
 
         [HttpPost]
@@ -105,6 +127,7 @@ namespace TaskManagement.Web.Controllers
         public async Task<IActionResult> Filter(TaskFilterModel model)
         {
             var tasks = await _taskService.GetFilteredTasksAsync(model);
+            ViewData["FilteredCount"] = tasks.Count;
             return PartialView("~/Views/Admin/Task/_List.cshtml", tasks);
         }
 
@@ -114,7 +137,7 @@ namespace TaskManagement.Web.Controllers
         #region User API Calls
 
         [HttpPost]
-        public async Task<IActionResult> CreateUser(CreateUserModel model)
+        public async Task<IActionResult> CreateUser([FromBody] CreateUserModel model)
         {
             await _userService.CreateUserAsync(model);
             return RedirectToAction("Users");

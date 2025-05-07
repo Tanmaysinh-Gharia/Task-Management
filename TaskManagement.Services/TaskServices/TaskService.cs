@@ -77,5 +77,15 @@ namespace TaskManagement.Services.TaskServices
             return _responseHandler.GetResponse<List<TaskDetailViewModel>>(response);
         }
 
+        public async Task<TaskModel> GetTaskByIdAsync(int id)
+        {
+            var response = await GetAuthenticatedRequest()
+                .AppendPathSegment(TaskManagementRoutes.GetTask.Replace("{id}", id.ToString()))
+                .GetAsync()
+                .ReceiveJson<ApiResponse>();
+
+            return _responseHandler.GetResponse<TaskModel>(response);
+        }
+
     }
 }

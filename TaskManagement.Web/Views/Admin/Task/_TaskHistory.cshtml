@@ -13,17 +13,16 @@
 
         <div class="drawer-form view-drawer">
             <div class="row">
-                <div class="form-title">
-                    Change Logs
-                </div>
+                <div class="form-title">Change Logs</div>
 
                 @if (Model != null && Model.Any())
                 {
                     foreach (var item in Model)
                     {
-                        <div class="col-lg-12 data-detail">
-                            <div class="data-label">
-                                <strong>@item.FieldName</strong> (Updated by: @item.UpdatedBy on @item.ChangeTime.ToString("g"))
+                        <div class="col-lg-12 form-floating data-detail">
+                            <div class="form-label">
+                                <strong> @( @item.FieldName != "Created" ?  "Changed Field:" : "")  @item.FieldName</strong>
+                                <span class="text-muted"> (Updated by: @item.UpdatedBy on @item.ChangeTime.ToString("g"))</span>
                             </div>
                             <div class="data-val">
                                 <span class="text-muted">Old: @item.OldValue</span><br />
@@ -34,18 +33,15 @@
                 }
                 else
                 {
-                    <div class="col-lg-12 data-detail">
-                        <div class="data-val">
-                            No history found for this task.
-                        </div>
+                    <div class="col-lg-12 form-floating data-detail">
+                        <div class="data-val text-muted">No history found for this task.</div>
                     </div>
                 }
             </div>
 
             <div class="invite-botttom">
                 <a class="cancel" onclick="Common.closeDrawer('#drawerTaskHistory')">
-                    <i class="nt-backward"></i>
-                    Close
+                    <i class="nt-backward"></i> Close
                 </a>
             </div>
         </div>

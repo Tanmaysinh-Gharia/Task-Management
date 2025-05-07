@@ -44,14 +44,14 @@ namespace TaskManagement.Web
             app.UseStaticFiles();
 
             app.UseRouting();
-            app.UseWhen(context => !context.Request.Path.StartsWithSegments("/lib") &&
-                      !context.Request.Path.StartsWithSegments("/css") &&
-                      !context.Request.Path.StartsWithSegments("/js") &&
-                      !context.Request.Path.StartsWithSegments("/images"),
-                        appBuilder =>
-                        {
-                            appBuilder.UseMiddleware<AutoRefreshTokenMiddleware>();
-                        });
+            //app.UseWhen(context => !context.Request.Path.StartsWithSegments("/lib") &&
+            //          !context.Request.Path.StartsWithSegments("/css") &&
+            //          !context.Request.Path.StartsWithSegments("/js") &&
+            //          !context.Request.Path.StartsWithSegments("/images"),
+            //            appBuilder =>
+            //            {
+            //                appBuilder.UseMiddleware<AutoRefreshTokenMiddleware>();
+            //            });
             app.UseAuthorization();
 
             app.MapControllerRoute(

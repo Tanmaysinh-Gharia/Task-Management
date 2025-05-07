@@ -45,7 +45,7 @@
                         <em class="nt-more"></em>
                         <div class="link-box">
                             <div class="link" onclick="Admin.View('@item.Id')">
-                                <em class="nt-eye"></em> View
+                                <em class="nt-eye"></em> View 
                             </div>
                             <div class="link" onclick="Admin.Edit('@item.Id')">
                                 <em class="nt-edit"></em> Edit
@@ -63,3 +63,14 @@
         </div>
     </div>
 }
+
+<script>
+    const count = @ViewData["FilteredCount"] ?? 0;
+    $(".alerts-title h1").text(`Tasks (${count})`);
+
+    if (count < 10) {
+        $("#btnLoadMoreTasks").hide();
+    } else {
+        $("#btnLoadMoreTasks").show();
+    }
+</script>

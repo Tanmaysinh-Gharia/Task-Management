@@ -53,6 +53,13 @@
         $("body").removeClass("overflow-hidden");
         $(".overlay", self).css('display', 'none');
         Common.hideLoader();
+        try {
+            Admin.loadTaskList();
+        }
+        catch {
+            Admin.loadUserList();
+        }
+
     },
 
     showLoader: function () {
