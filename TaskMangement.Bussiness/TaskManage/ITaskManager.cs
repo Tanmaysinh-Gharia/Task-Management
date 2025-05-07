@@ -15,6 +15,8 @@ namespace TaskManagement.Bussiness.TaskManage
         Task ChangeTaskStatusAsync(int id, TaskStatus status, int userId, bool isAdmin);
         Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(TaskFilterModel model, int userId, bool isAdmin);
 
+        Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int userId, bool isAdmin);
+
     }
 
 }

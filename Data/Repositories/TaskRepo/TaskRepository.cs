@@ -80,5 +80,54 @@ namespace TaskManagement.Data.Repositories.TaskRepo
                                         {isAdmin}")
                                 .ToListAsync();
         }
+
+
+        public async Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int currentUserId, bool isAdmin)
+        {
+            var task = await _context.Tasks.FindAsync(taskId);
+            if (task == null || task.IsDeleted) return new();
+
+            bool isPersonalTask = task.CreatorId == task.AssigneeId;
+
+            if (!isAdmin)
+            {
+                if (isPersonalTask && task.AssigneeId != currentUserId)
+                    throw new UnauthorizedAccessException("Access denied to personal task history.");
+                if (!isPersonalTask && task.AssigneeId != currentUserId)
+                    throw new UnauthorizedAccessException("Access denied to this task.");
+            }
+
+            return await (from td in _context.TaskDetails
+                          join u in _context.Users on td.UpdatedById equals u.Id
+                          where td.TaskId == taskId
+                          orderby td.ChangeTime
+                          select new TaskDetailViewModel
+                          {
+                              FieldName = td.FieldName,
+                              OldValue = td.OldValue,
+                              NewValue = td.NewValue,
+                              UpdatedBy = u.UserName,
+                              ChangeTime = td.ChangeTime
+                          }).ToListAsync();
+        }
+
+
+        public async Task<TaskEntity?> GetWithUserAsync(int taskId)
+        {
+            return await _context.Tasks
+                .Include(t => t.Creator)
+                .Include(t => t.Assignee)
+                .FirstOrDefaultAsync(t => t.Id == taskId && !t.IsDeleted);
+        }
+
+        public async Task<List<TaskDetail>> GetTaskDetailsAsync(int taskId)
+        {
+            return await _context.TaskDetails
+                .Include(td => td.UpdatedBy)
+                .Where(td => td.TaskId == taskId)
+                .OrderBy(td => td.ChangeTime)
+                .ToListAsync();
+        }
+
     }
 }

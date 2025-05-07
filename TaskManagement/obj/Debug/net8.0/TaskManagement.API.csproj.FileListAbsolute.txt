@@ -164,6 +164,7 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\n
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.csproj.CoreCompileInputs.cache
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.MvcApplicationPartsAssemblyInfo.cs
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.MvcApplicationPartsAssemblyInfo.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\TaskManagement.API.sourcelink.json
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\scopedcss\bundle\TaskManagement.API.styles.css
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\staticwebassets.build.json
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement\obj\Debug\net8.0\staticwebassets.development.json

@@ -1,0 +1,55 @@
+﻿@model IEnumerable<TaskManagement.Core.ViewModels.UserManagement.UserViewModel>
+
+@foreach (var item in Model)
+{
+    <div class="alerts-content-single">
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-title">
+                    <span>@item.UserName</span>
+                    <em class="nt-edit edit-name-btn" onclick="Admin.ShowEditOption(this)"></em>
+                    <div class="edit-name">
+                        <div class="edit-box">
+                            <input type="text" class="name-input" value="@item.UserName">
+                            <button class="secondary-btn" type="button" onclick="Admin.CloseEditOption(this)">Cancel</button>
+                            <button class="btn-invite" type="button">Save</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-desc">@item.Email</div>
+            </div>
+        </div>
+
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-desc">@item.PhoneNumber</div>
+            </div>
+        </div>
+
+        <div class="alerts-content-inner">
+            <div class="content-main">
+                <div class="content-last">
+                    <span class="closed btn-all-case">
+                        <i class="nt-tick"></i>
+                        <span class="alert-text">@((item.IsActive) ? "Active" : "Inactive")</span>
+                    </span>
+
+                    <div class="edit-links">
+                        <em class="nt-more"></em>
+                        <div class="link-box">
+                            <div class="link" onclick="Admin.View('@item.Id', true)">
+                                <em class="nt-eye"></em> View
+                            </div>
+                            <div class="link" onclick="Admin.Edit('@item.Id', true)">
+                                <em class="nt-edit"></em> Edit
+                            </div>
+                            <div class="link" onclick="Admin.Delete('@item.Id', true)">
+                                <em class="nt-bin"></em> Delete
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

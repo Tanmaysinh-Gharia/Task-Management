@@ -134,5 +134,29 @@ namespace TaskManagement.API.Controllers
                 return StatusCode(500, ResponseBuilder.Error("Error fetching task list.", ex));
             }
         }
+
+
+        [HttpGet(TaskManagementRoutes.History)]
+        public async Task<IActionResult> GetTaskHistory(int id)
+        {
+            try
+            {
+                int userId = GetUserId();
+                bool isAdmin = IsAdmin();
+
+                var result = await _taskManager.GetTaskHistoryAsync(id, userId, isAdmin);
+                return Ok(ResponseBuilder.Success(result));
+            }
+            catch (UnauthorizedAccessException)
+            {
+                return Forbid();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error fetching task history");
+                return StatusCode(500, ResponseBuilder.Error("Error fetching task history", ex));
+            }
+        }
+
     }
 }

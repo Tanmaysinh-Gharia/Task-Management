@@ -1,0 +1,63 @@
+﻿@model TaskManagement.Core.ViewModels.UserManagement.UserViewModel
+
+<div id="drawerEditUser" class="drawer">
+    <div class="overlay" style="display: none;"></div>
+    <div class="drawer-inner">
+        <div class="drawer-title">
+            <a title="back" onclick="Common.closeDrawer('#drawerEditUser')">
+                <i class="nt-angle-prev"></i>
+            </a>
+            <h1>Edit User</h1>
+        </div>
+
+        <form class="drawer-form" id="frmEditUser">
+            @Html.HiddenFor(m => m.Id)
+
+            <div class="row">
+                <div class="form-title">Update user details below.</div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="UserName" class="form-control" placeholder=" " />
+                    <label asp-for="UserName" class="form-label"><span class="red">*</span> Username</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="Email" class="form-control" placeholder=" " />
+                    <label asp-for="Email" class="form-label"><span class="red">*</span> Email</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="FirstName" class="form-control" placeholder=" " />
+                    <label asp-for="FirstName" class="form-label"><span class="red">*</span> First Name</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="LastName" class="form-control" placeholder=" " />
+                    <label asp-for="LastName" class="form-label"><span class="red">*</span> Last Name</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="PhoneNumber" class="form-control" placeholder=" " />
+                    <label asp-for="PhoneNumber" class="form-label"><span class="red">*</span> Phone</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <select asp-for="IsActive" class="form-control select2">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                    <label asp-for="IsActive" class="form-label"><span class="red">*</span> Status</label>
+                </div>
+            </div>
+
+            <div class="invite-botttom">
+                <a class="cancel" onclick="Common.closeDrawer('#drawerEditUser')">
+                    <i class="nt-backward"></i> Cancel
+                </a>
+                <div class="invite">
+                    <button type="submit" class="btn-invite">Update</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

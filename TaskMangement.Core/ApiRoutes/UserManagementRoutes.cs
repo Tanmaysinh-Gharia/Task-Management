@@ -14,7 +14,7 @@ namespace TaskManagement.Core.ApiRoutes
         public const string GetUsers = "user-list";
         public const string GetUserById = "get-user/{id}";
         public const string AddUser = "add-user";
-        public const string UpdateUser = "update-user/{id}";
+        public const string UpdateUser = "update-user";
         public const string DeleteUser = "delete-user/{id}";
         #endregion
     }

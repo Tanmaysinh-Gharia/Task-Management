@@ -1,0 +1,16 @@
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\bin\Debug\net8.0\TaskManagement.Services.deps.json
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\bin\Debug\net8.0\TaskManagement.Services.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\bin\Debug\net8.0\TaskManagement.Services.pdb
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\bin\Debug\net8.0\TaskManagement.Core.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\bin\Debug\net8.0\TaskManagement.Core.pdb
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.csproj.AssemblyReference.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.AssemblyInfoInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.AssemblyInfo.cs
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.csproj.CoreCompileInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.sourcelink.json
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskMana.0D40AF25.Up2Date
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\refint\TaskManagement.Services.dll
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\TaskManagement.Services.pdb
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskManagement.Services\obj\Debug\net8.0\ref\TaskManagement.Services.dll

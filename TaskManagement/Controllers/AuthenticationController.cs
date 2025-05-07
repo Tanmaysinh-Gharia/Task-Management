@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity.Data;
 using Microsoft.AspNetCore.Mvc;
 using TaskManagement.Bussiness.Authentication;
+using TaskManagement.Core.ApiRoutes;
+using TaskManagement.Core.Common.ResponseHandler;
 using TaskManagement.Core.ViewModels.Login;
 using LoginRequest = TaskManagement.Core.ViewModels.Login.LoginRequest;
 
@@ -17,13 +19,13 @@ namespace TaskManagement.API.Controllers
             _authManager = authManager;
         }
         
-        [HttpPost("login")]
+        [HttpPost(AuthenticationManagementRoutes.Login)]
         public async Task<IActionResult> Login([FromBody] LoginRequest request)
         {
             try
             {
                 var response = await _authManager.LoginAsync(request.Email, request.Password);
-                return Ok(response);
+                return Ok(ResponseBuilder.Success(response));
             }
             catch (UnauthorizedAccessException)
             {
@@ -31,7 +33,7 @@ namespace TaskManagement.API.Controllers
             }
         }
         
-        [HttpPost("refresh")]
+        [HttpPost(AuthenticationManagementRoutes.Refresh)]
         public async Task<IActionResult> RefreshToken([FromBody] string token)
         {
             try

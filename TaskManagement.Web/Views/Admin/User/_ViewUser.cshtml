@@ -1,0 +1,55 @@
+﻿@model TaskManagement.Core.ViewModels.UserManagement.UserViewModel
+
+<div id="drawerViewUser" class="drawer">
+    <div class="overlay" style="display: none;"></div>
+    <div class="drawer-inner">
+        <div class="drawer-title">
+            <a title="back" onclick="Common.closeDrawer('#drawerViewUser')">
+                <i class="nt-angle-prev"></i>
+            </a>
+            <h1>User Details</h1>
+        </div>
+
+        <form class="drawer-form view-drawer">
+            <div class="row">
+                <div class="form-title">User Summary</div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">User Name</div>
+                    <div class="data-val">@Model.UserName</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Email</div>
+                    <div class="data-val">@Model.Email</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">First Name</div>
+                    <div class="data-val">@Model.FirstName</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Last Name</div>
+                    <div class="data-val">@Model.LastName</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Phone Number</div>
+                    <div class="data-val">@Model.PhoneNumber</div>
+                </div>
+
+                <div class="col-lg-6 data-detail">
+                    <div class="data-label">Status</div>
+                    <div class="data-val">@(Model.IsActive ? "Active" : "Inactive")</div>
+                </div>
+            </div>
+
+            <div class="invite-botttom">
+                <a class="cancel" onclick="Common.closeDrawer('#drawerViewUser')">
+                    <i class="nt-backward"></i> Cancel
+                </a>
+            </div>
+        </form>
+    </div>
+</div>

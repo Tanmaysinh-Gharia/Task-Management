@@ -179,17 +179,109 @@ namespace TaskManagement.Bussiness.TaskManage
 
         public async Task ChangeTaskStatusAsync(int id, TaskStatus status, int userId, bool isAdmin)
         {
-            var task = await _taskRepo.GetByIdAsync(id);
-            if (task == null || task.IsDeleted) throw new Exception("Task not found");
+            //var task = await _taskRepo.GetByIdAsync(id);
+            //if (task == null || task.IsDeleted) throw new Exception("Task not found");
 
 
-            if (!isAdmin && task.AssigneeId != userId)
-                throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
+            //if (!isAdmin && task.AssigneeId != userId)
+            //    throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
 
-            task.Status = status;
-            task.UpdatedAt = DateTime.Now;
-            await _taskRepo.UpdateAsync(task);
+            //task.Status = status;
+            //task.UpdatedAt = DateTime.Now;
+            //await _taskRepo.UpdateAsync(task);
+
+
+
+
+
+            await _unitOfWork.BeginTransactionAsync();
+            try
+            {
+                var task = await _taskRepo.GetByIdAsync(id);
+                if (task == null || task.IsDeleted) throw new Exception("Task not found");
+
+
+                if (!isAdmin && task.AssigneeId != userId)
+                    throw new UnauthorizedAccessException("You can only change status of your assigned tasks.");
+
+                var now = DateTime.Now;
+                var changes = new List<TaskDetail>();
+                
+                if(status == null)
+                {
+                    throw new Exception("Status cannot be null");
+                }
+
+                if (status != null && status != task.Status)
+                {
+                    changes.Add(CreateDetail(task.Id, userId, "Status", task.Status.ToString(), status.ToString(), now));
+                    task.Status = status;
+                }
+                else
+                {
+                    throw new Exception("Status is the same as current status");
+                }
+
+                task.UpdatedAt = now;
+
+                await _taskRepo.UpdateAsync(task);
+
+                if (changes.Count > 0)
+                    await _taskRepo.AddTaskDetailsAsync(changes);
+
+                await _unitOfWork.CommitAsync();
+            }
+            catch
+            {
+                await _unitOfWork.RollbackAsync();
+                throw;
+            }
         }
+
+
+        public async Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int requesterId, bool isAdmin)
+        {
+            var task = await _taskRepo.GetWithUserAsync(taskId);
+            if (task == null || task.IsDeleted)
+                throw new Exception("Task not found");
+
+            // Authorization checks
+            if (!isAdmin)
+            {
+                bool isPersonal = task.CreatorId == task.AssigneeId && task.CreatorId == requesterId;
+                bool isAssignedToUser = task.AssigneeId == requesterId;
+
+                if (!isPersonal && !isAssignedToUser)
+                    throw new UnauthorizedAccessException("User not allowed to view this task history.");
+            }
+
+            var history = new List<TaskDetailViewModel>();
+
+            // 1️ Add creation snapshot
+            history.Add(new TaskDetailViewModel
+            {
+                FieldName = "Created",
+                OldValue = null,
+                NewValue = $"Title: {task.Title}, Description: {task.Description}, Status: {task.Status}, Priority: {task.Priority}, DueDate: {task.DueDate}, AssignedTo: {task.Assignee?.UserName}",
+                UpdatedBy = task.Creator?.UserName ?? "Unknown",
+                ChangeTime = task.CreatedAt
+            });
+
+            // 2️ Add updates & deletion logs
+            var details = await _taskRepo.GetTaskDetailsAsync(taskId);
+
+            history.AddRange(details.Select(d => new TaskDetailViewModel
+            {
+                FieldName = d.FieldName,
+                OldValue = d.OldValue,
+                NewValue = d.NewValue,
+                UpdatedBy = d.UpdatedBy?.UserName ?? "System",
+                ChangeTime = d.ChangeTime
+            }));
+
+            return history.OrderBy(h => h.ChangeTime).ToList();
+        }
+
 
 
         #region Private Methods

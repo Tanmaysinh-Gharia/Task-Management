@@ -1,0 +1,61 @@
+﻿@model TaskManagement.Core.ViewModels.Login.LoginRequest
+
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewData["Title"] = "Login";
+}
+@section Header {
+    @await Html.PartialAsync("_Header")
+}
+
+<body class="login-bg">
+    <section class="main-dev-for-all elementes-center position-relative">
+        <div class="containerc">
+            <div class="common-box box-style margin-auto position-relative after-po w-100">
+                <div class="uper-bx">
+                    <form id="frmLogin" method="post" class="form" autocomplete="off" novalidate="novalidate">
+                        <div id="divLoginForm" class="login-form margin-auto">
+                            <div class="typography-div">
+                                <div class="bx-main-title">
+                                    <h1>Welcome!</h1>
+                                </div>
+                            </div>
+
+                            <div class="form-floating position-relative">
+                                <input id="txtEmail"
+                                       class="form-control"
+                                       name="Email"
+                                       placeholder
+                                       type="text"
+                                       value="@Model?.Email" />
+                                <label class="form-label position-absolute" for="txtEmail">Email</label>
+                            </div>
+
+                            <div class="form-floating position-relative">
+                                <input id="txtPassword"
+                                       class="form-control"
+                                       name="Password"
+                                       placeholder
+                                       type="password" />
+                                <label class="form-label position-absolute" for="txtPassword">Password</label>
+                            </div>
+
+                            <div class="text-right">
+                                <div class="btn-group">
+                                    <button id="btnLogin" type="submit" class="btn-invite">
+                                        <span>Login</span>&nbsp;&nbsp;<span class="nt-arrow-right"></span>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <div class="loading-wrapper" style="display:none;">
+        <div class="loading-content"></div>
+        <div class="loading-text position-absolute">Loading...</div>
+    </div>
+</body>

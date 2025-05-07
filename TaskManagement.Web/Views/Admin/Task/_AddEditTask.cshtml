@@ -1,0 +1,88 @@
+﻿@using TaskManagement.Core.Enums
+@using TaskStatus = TaskManagement.Core.Enums.TaskStatus
+@model TaskManagement.Core.ViewModels.TaskManagement.TaskModel
+
+<div class="drawer" id="drawerAddEditTask">
+    <div class="overlay" onclick="Common.closeDrawer('#drawerAddEditTask')"></div>
+
+    <div class="drawer-inner">
+        <div class="drawer-title">
+            <a title="back" onclick="Common.closeDrawer('#drawerAddEditTask')">
+                <i class="nt-angle-prev"></i>
+            </a>
+            <h1>@(Model?.Id > 0 ? "Edit Task" : "Add Task")</h1>
+        </div>
+
+        <form id="formAddEditTask" class="drawer-form">
+            <input type="hidden" id="taskId" value="@Model?.Id" />
+
+            <div class="row">
+                <div class="form-title">Task Information</div>
+
+                <div class="col-lg-6 form-floating">
+                    <input id="txtTitle" class="form-control" placeholder="Title" type="text"
+                           value="@Model?.Title" required />
+                    <label for="txtTitle" class="form-label">Title <span class="red">*</span></label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input id="txtDescription" class="form-control" placeholder="Description" type="text"
+                           value="@Model?.Description" />
+                    <label for="txtDescription" class="form-label">Description</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <select id="ddlPriority" class="form-control select2">
+                        <option value="">Select Priority</option>
+                        @foreach (TaskPriority priority in Enum.GetValues(typeof(TaskPriority)))
+                        {
+                            <option value="@((int)priority)" selected="@(Model?.Priority == priority)">
+                                @priority.ToString()
+                            </option>
+                        }
+                    </select>
+                    <label for="ddlPriority" class="form-label">Priority <span class="red">*</span></label>
+
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <select id="ddlStatus" class="form-control select2">
+                        <option value="">Select Status</option>
+                        @foreach (TaskStatus status in Enum.GetValues(typeof(TaskStatus)))
+                        {
+                            <option value="@((int)status)" selected="@(Model?.Status == status)">
+                                @status.ToString()
+                            </option>
+                        }
+                    </select>
+                    <label for="ddlStatus" class="form-label">Status <span class="red">*</span></label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input id="txtDueDate" class="form-control" type="date"
+                           value="@Model?.DueDate?.ToString("yyyy-MM-dd")" />
+                    <label for="txtDueDate" class="form-label">Due Date</label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <select id="ddlAssigneeId" class="form-control select2">
+                        <option value="">Select Assignee</option>
+                        @* Populate via JS *@
+                    </select>
+                    <label for="ddlAssigneeId" class="form-label">Assign To</label>
+                </div>
+            </div>
+
+            <div class="invite-botttom">
+                <a class="cancel" onclick="Common.closeDrawer('#drawerAddEditTask')">
+                    <i class="nt-backward"></i> Cancel
+                </a>
+                <div class="invite">
+                    <button id="btnSaveTask" type="button" class="btn-invite">
+                        Save
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

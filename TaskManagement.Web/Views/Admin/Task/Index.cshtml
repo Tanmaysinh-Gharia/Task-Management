@@ -1,0 +1,35 @@
+﻿@model List<TaskManagement.Core.ViewModels.TaskManagement.TaskListItemViewModel>
+
+
+@{
+    ViewData["Title"] = "Task Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Header {
+    @await Html.PartialAsync("_Header")
+}
+
+<section class="main">
+@await Html.PartialAsync("~/Views/Admin/Task/_AddEditTask.cshtml",new TaskManagement.Core.ViewModels.TaskManagement.TaskModel())
+    <div class="container">
+        <div class="alerts-main">
+            <div class="alerts-title">
+                <h1>Tasks ( @Model.Count )</h1>
+                <div class="alerts-icon">
+                    <ul>
+                        <li>
+                            <a class="btn-invite" onclick="Admin.openTaskDrawer()">Add Task</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <div id="taskListContainer">
+                @await Html.PartialAsync("~/Views/Admin/Task/_List.cshtml", Model)
+
+            </div>
+            <div class="load-more-btn">
+                <button id="btnLoadMoreTasks" class="btn-invite">Load More</button>
+            </div>
+        </div>
+    </div>
+</section>

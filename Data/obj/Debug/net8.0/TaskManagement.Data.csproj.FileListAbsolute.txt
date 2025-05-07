@@ -9,6 +9,7 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\Task
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.AssemblyInfoInputs.cache
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.AssemblyInfo.cs
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.csproj.CoreCompileInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.sourcelink.json
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskMana.634D6A5D.Up2Date
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\TaskManagement.Data.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\Data\obj\Debug\net8.0\refint\TaskManagement.Data.dll

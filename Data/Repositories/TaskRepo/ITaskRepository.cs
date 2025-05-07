@@ -18,6 +18,13 @@ namespace TaskManagement.Data.Repositories.TaskRepo
         Task UpdateAsync(TaskEntity task);
         Task DeleteAsync(int id);
         Task AddTaskDetailsAsync(List<TaskDetail> details);
+
+        Task<List<TaskDetailViewModel>> GetTaskHistoryAsync(int taskId, int currentUserId, bool isAdmin);
+
+        Task<TaskEntity?> GetWithUserAsync(int taskId);
+
+        Task<List<TaskDetail>> GetTaskDetailsAsync(int taskId);
+
         Task<List<TaskListItemViewModel>> GetFilteredTasksAsync(
             string? searchTerm,
             int? status,

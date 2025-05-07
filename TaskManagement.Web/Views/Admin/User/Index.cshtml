@@ -1,0 +1,35 @@
+﻿@model List<TaskManagement.Core.ViewModels.UserManagement.UserViewModel>
+
+@{
+    ViewData["Title"] = "User Management";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@section Header {
+    @await Html.PartialAsync("_Header")
+}
+
+<section class="main">
+    <div class="container">
+        <div class="alerts-main">
+            <div class="alerts-title">
+                <h1>Users</h1>
+                <div class="alerts-icon">
+                    <ul>
+                        <li class="invite">
+                            <a title="Add User" class="btn-invite" onclick="Admin.OpenUserDrawer()">
+                                Add User
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div id="divUserList">
+                @await Html.PartialAsync("~/Views/Admin/User/_List.cshtml", Model )
+            </div>
+        </div>
+    </div>
+</section>
+
+@* @await Html.PartialAsync("~/Views/Admin/User/_AddEditUser.cshtml", new TaskManagement.Core.ViewModels.UserManagement.UserModel()) *@

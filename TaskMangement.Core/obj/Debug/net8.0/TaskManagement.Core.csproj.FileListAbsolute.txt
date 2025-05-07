@@ -7,6 +7,7 @@ C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Deb
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.AssemblyInfoInputs.cache
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.AssemblyInfo.cs
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.csproj.CoreCompileInputs.cache
+C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.sourcelink.json
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\refint\TaskManagement.Core.dll
 C:\Users\TanmaysinhGharia\source\repos\TaskManagement\TaskMangement.Core\obj\Debug\net8.0\TaskManagement.Core.pdb

@@ -1,0 +1,83 @@
+﻿@model TaskManagement.Core.ViewModels.UserManagement.CreateUserModel
+
+<div id="drawerAddEditUser" class="drawer">
+    <div class="overlay" style="display: none;"></div>
+    <div class="drawer-inner">
+        <div class="drawer-title">
+            <a title="back" onclick="Common.closeDrawer('#drawerAddEditUser')">
+                <i class="nt-angle-prev"></i>
+            </a>
+            <h1>Add User</h1>
+        </div>
+
+        <form class="drawer-form" id="frmUser">
+            <div class="row">
+                <div class="form-title">
+                    Please provide the following information about the user.
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="UserName" class="form-control" placeholder required />
+                    <label for="UserName" class="form-label">
+                        <span class="red">*</span> User Name
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="Email" type="email" class="form-control" placeholder required />
+                    <label for="Email" class="form-label">
+                        <span class="red">*</span> Email
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="FirstName" class="form-control" placeholder required />
+                    <label for="FirstName" class="form-label">
+                        <span class="red">*</span> First Name
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="LastName" class="form-control" placeholder required />
+                    <label for="LastName" class="form-label">
+                        <span class="red">*</span> Last Name
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="PhoneNumber" class="form-control" placeholder required />
+                    <label for="PhoneNumber" class="form-label">
+                        <span class="red">*</span> Phone Number
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <input asp-for="Password" type="password" class="form-control" placeholder required />
+                    <label for="Password" class="form-label">
+                        <span class="red">*</span> Password
+                    </label>
+                </div>
+
+                <div class="col-lg-6 form-floating">
+                    <select asp-for="IsActive" class="form-control select2" required>
+                        <option value="">Please select</option>
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>
+                    </select>
+                    <label for="IsActive" class="form-label">
+                        <span class="red">*</span> Status
+                    </label>
+                </div>
+            </div>
+
+            <div class="invite-botttom">
+                <a class="cancel" onclick="Common.closeDrawer('#drawerAddEditUser')">
+                    <i class="nt-backward"></i> Cancel
+                </a>
+                <div class="invite">
+                    <button type="submit" class="btn-invite">Save</button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

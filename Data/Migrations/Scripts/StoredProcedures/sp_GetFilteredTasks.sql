@@ -14,7 +14,6 @@ BEGIN
 
     DECLARE @Offset INT = (@PageNumber - 1) * @PageSize;
 
-    -- 🛡️ Safe fallback for columns
     IF @SortColumn NOT IN ('Title', 'Status', 'Priority', 'DueDate', 'UpdatedAt', 'CreatedAt')
         SET @SortColumn = 'CreatedAt';
 
@@ -52,9 +51,11 @@ BEGIN
     ELSE
         SET @Sql += ' AND NOT (t.CreatorId = t.AssigneeId AND t.AssigneeId != @UserId)';
 
-
     SET @Sql += ' ORDER BY [' + @SortColumn + '] ' + @SortOrder;
     SET @Sql += ' OFFSET ' + CAST(@Offset AS NVARCHAR) + ' ROWS FETCH NEXT ' + CAST(@PageSize AS NVARCHAR) + ' ROWS ONLY;';
 
-    EXEC sp_executesql @Sql;
+    EXEC sp_executesql 
+        @Sql,
+        N'@UserId INT',
+        @UserId;
 END;

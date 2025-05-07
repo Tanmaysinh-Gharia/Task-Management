@@ -55,36 +55,40 @@ namespace TaskManagement.Core.TypeFinder
         public virtual IList<Assembly> GetAssemblies()
         {
             var assemblies = new List<Assembly>();
-            var loadedAssemblies = AppDomain.CurrentDomain.GetAssemblies().ToList();
+            var visited = new HashSet<string>();
+            var entryAssembly = Assembly.GetEntryAssembly();
 
-            // Load referenced JWTAuth assemblies if not already loaded
-            var requiredPrefixes = new[] { "TaskManagement.Bussiness", "TaskManagement.Data" };
+            if (entryAssembly == null)
+                return assemblies;
 
-            foreach (var assembly in loadedAssemblies)
+            void LoadRecursively(Assembly assembly)
             {
-                assemblies.Add(assembly);
+                if (assembly == null || !visited.Add(assembly.FullName))
+                    return;
+
+                if (assembly.FullName.StartsWith("TaskManagement."))
+                    assemblies.Add(assembly);
 
                 foreach (var reference in assembly.GetReferencedAssemblies())
                 {
-                    if (requiredPrefixes.Any(p => reference.FullName.StartsWith(p)) &&
-                        !loadedAssemblies.Any(a => a.FullName == reference.FullName))
+                    if (!reference.FullName.StartsWith("TaskManagement."))
+                        continue;
+
+                    try
                     {
-                        var loaded = Assembly.Load(reference);
-                        assemblies.Add(loaded);
+                        var referencedAssembly = Assembly.Load(reference);
+                        LoadRecursively(referencedAssembly);
+                    }
+                    catch
+                    {
+                        // Skip assemblies that can't be loaded
                     }
                 }
             }
 
-            // Add manually if still missing
-            foreach (var prefix in requiredPrefixes)
-            {
-                if (!assemblies.Any(a => a.FullName.StartsWith(prefix)))
-                {
-                    assemblies.Add(Assembly.Load(prefix));
-                }
-            }
+            LoadRecursively(entryAssembly);
 
-            return assemblies.Distinct().ToList();
+            return assemblies;
         }
     }
 }
